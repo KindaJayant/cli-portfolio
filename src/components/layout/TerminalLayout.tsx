@@ -3,10 +3,20 @@ import MatrixBackground from './MatrixBackground';
 import { useTerminal } from '../../context/TerminalContext';
 
 const TerminalLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { glitchModeActive } = useTerminal();
+    const { glitchModeActive, theme } = useTerminal();
+
+    // Theme Classes Map
+    const themeClasses = {
+        dark: 'bg-terminal-black text-terminal-green selection:bg-terminal-green selection:text-terminal-black',
+        light: 'bg-white text-black selection:bg-black selection:text-white',
+        cyberpunk: 'bg-gray-900 text-fuchsia-400 selection:bg-fuchsia-400 selection:text-black',
+    };
 
     return (
-        <div className={`min-h-screen bg-terminal-black text-terminal-green font-mono relative selection:bg-terminal-green selection:text-terminal-black ${glitchModeActive ? 'animate-pulse' : ''}`}>
+        <div className={`min-h-screen font-mono relative transition-colors duration-500
+            ${themeClasses[theme]}
+            ${glitchModeActive ? 'animate-pulse' : ''}
+        `}>
             <MatrixBackground />
 
             {/* CRT Scanline Effect */}
@@ -19,16 +29,6 @@ const TerminalLayout: React.FC<{ children: React.ReactNode }> = ({ children }) =
 
             <div className="relative z-10 p-4 min-h-screen flex flex-col max-w-4xl mx-auto items-start justify-start">
                 {children}
-            </div>
-
-            {/* Quick Help Box */}
-            <div className="hidden md:block fixed bottom-4 right-4 z-50 border border-terminal-green/30 bg-terminal-black/80 p-4 rounded text-xs text-terminal-green font-mono backdrop-blur-sm shadow-[0_0_10px_rgba(0,255,0,0.1)]">
-                <div className="font-bold mb-2 border-b border-terminal-green/30 pb-1">Quick Start</div>
-                <ul className="space-y-1">
-                    <li>Type <span className="font-bold">'help'</span> for commands</li>
-                    <li>Type <span className="font-bold">'whoami'</span> for bio</li>
-                    <li>Type <span className="font-bold">'projects'</span> for work</li>
-                </ul>
             </div>
         </div>
     );

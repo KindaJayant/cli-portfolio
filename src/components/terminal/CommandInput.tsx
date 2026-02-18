@@ -3,11 +3,13 @@ import { useTerminal } from '../../context/TerminalContext';
 import { commands } from '../../utils/commands';
 import { useCommandHistory } from '../../utils/useCommandHistory';
 import { useAutocomplete } from '../../utils/useAutocomplete';
+import { useAiChat } from '../../utils/useAiChat';
 
 const CommandInput: React.FC = () => {
     const [input, setInput] = useState('');
-    const { executeCommand, history, pushToHistory } = useTerminal();
+    const { executeCommand, history, pushToHistory, theme, isAiMode } = useTerminal();
     const inputRef = useRef<HTMLInputElement>(null);
+    const { handleAiInput } = useAiChat();
 
     // Extract just the command strings for history
     const commandHistory = history.map(h => h.command).filter(c => c);
@@ -18,7 +20,13 @@ const CommandInput: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        executeCommand(input);
+
+        if (isAiMode) {
+            handleAiInput(input);
+        } else {
+            executeCommand(input);
+        }
+
         setInput('');
     };
 
@@ -64,9 +72,33 @@ const CommandInput: React.FC = () => {
         }
     };
 
+    const promptText = isAiMode ? 'jayant-ai>' : 'visitor@jayant-portfolio:~$';
+
+    // Theme-based class helpers
+    const getPromptColor = () => {
+        if (isAiMode) return 'text-purple-400';
+        if (theme === 'light') return 'text-black';
+        if (theme === 'cyberpunk') return 'text-cyan-400';
+        return 'text-terminal-green';
+    };
+
+    const getInputColor = () => {
+        if (theme === 'light') return 'text-black placeholder-gray-500';
+        if (theme === 'cyberpunk') return 'text-fuchsia-400 placeholder-fuchsia-400/30';
+        return 'text-terminal-green placeholder-terminal-green/30';
+    };
+
+    const getCursorColor = () => {
+        if (theme === 'light') return 'bg-black text-white';
+        if (theme === 'cyberpunk') return 'bg-cyan-400 text-black';
+        return 'bg-terminal-green text-terminal-black';
+    };
+
     return (
         <form onSubmit={handleSubmit} className="flex w-full mt-2">
-            <span className="mr-2 text-terminal-green font-bold">visitor@jayant-portfolio:~$</span>
+            <span className={`mr-2 font-bold shrink-0 font-mono ${getPromptColor()}`}>
+                {promptText}
+            </span>
             <div className="relative flex-grow">
                 <input
                     ref={inputRef}
@@ -75,15 +107,15 @@ const CommandInput: React.FC = () => {
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
                     onBlur={() => inputRef.current?.focus()}
-                    className="w-full bg-transparent border-none outline-none text-terminal-green font-mono caret-transparent relative z-[100] placeholder-terminal-green/30"
+                    className={`w-full bg-transparent border-none outline-none font-mono caret-transparent relative z-[100] ${getInputColor()}`}
                     autoFocus
                     spellCheck="false"
                     autoComplete="off"
-                    placeholder="type 'help' to get started"
+                    placeholder={isAiMode ? "Ask me anything..." : "type 'help' to get started"}
                 />
                 {/* Custom block cursor */}
                 <span
-                    className="absolute top-0 pointer-events-none bg-terminal-green text-terminal-black animate-blink z-[100]"
+                    className={`absolute top-0 pointer-events-none animate-blink z-[100] ${getCursorColor()}`}
                     style={{ left: `${input.length}ch` }}
                 >
                     &nbsp;

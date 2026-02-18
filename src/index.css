@@ -3,7 +3,56 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --color-text: #00ff00;
+    /* terminal-green */
+    --color-dim: #9ca3af;
+    /* gray-400 */
+    --color-accent: #ffffff;
+    --color-bg: #0c0c0c;
+  }
+
+  .theme-light {
+    --color-text: #111827;
+    /* gray-900 */
+    --color-dim: #4b5563;
+    /* gray-600 */
+    --color-accent: #000000;
+    --color-bg: #ffffff;
+  }
+
+  .theme-cyberpunk {
+    --color-text: #22d3ee;
+    /* cyan-400 - Main text/details */
+    --color-dim: #d946ef;
+    /* fuchsia-500 - Secondary/dim */
+    --color-accent: #e879f9;
+    /* fuchsia-400 - Highlights */
+    --color-bg: #0f0518;
+    /* Deep purple bg */
+  }
+
   body {
-    @apply bg-terminal-black text-terminal-green font-mono overflow-y-auto;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    @apply font-sans overflow-y-auto transition-colors duration-300;
+  }
+}
+
+@layer utilities {
+  .fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

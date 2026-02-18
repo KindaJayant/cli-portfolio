@@ -9,7 +9,7 @@ interface TypingOutputProps {
 const TypingOutput: React.FC<TypingOutputProps> = ({ text, onComplete }) => {
     const { displayedText } = useTypingEffect(text, 20, onComplete);
 
-    return <span className="whitespace-pre-wrap">{displayedText}</span>;
+    return <span className="whitespace-pre-wrap font-mono">{displayedText}</span>;
 };
 
 export default TypingOutput;

@@ -4,6 +4,7 @@ import CommandInput from './CommandInput';
 import MobileControls from './MobileControls';
 import { useTerminal } from '../../context/TerminalContext';
 import TypingOutput from './TypingOutput';
+import LightModeModal from './LightModeModal';
 
 const BOOT_SEQUENCE = [
     "Initializing Jayant Terminal v2.0...",
@@ -17,7 +18,8 @@ const Terminal: React.FC = () => {
     const {
         bootCompleted,
         setBootCompleted,
-        executeCommand
+        executeCommand,
+        theme, // Get theme from context
     } = useTerminal();
 
     // Local state for boot animation
@@ -41,6 +43,7 @@ const Terminal: React.FC = () => {
             // Skip boot on any key
             setBootCompleted(true);
             setShowBoot(false);
+            executeCommand('banner'); // Ensure banner runs
             if (bootTimeoutRef.current) clearTimeout(bootTimeoutRef.current);
         };
 
@@ -50,10 +53,9 @@ const Terminal: React.FC = () => {
             bootTimeoutRef.current = setTimeout(() => {
                 setBootCompleted(true);
                 setShowBoot(false);
-                // Run whoami after boot
-                executeCommand('whoami');
+                // Run banner after boot
+                executeCommand('banner');
             }, 800);
-            return;
         }
 
         return () => {
@@ -73,6 +75,7 @@ const Terminal: React.FC = () => {
                 onClick={() => {
                     setBootCompleted(true);
                     setShowBoot(false);
+                    executeCommand('banner'); // Ensure banner runs
                 }}
             >
                 {BOOT_SEQUENCE.slice(0, currentLine + 1).map((line, index) => (
@@ -96,12 +99,13 @@ const Terminal: React.FC = () => {
 
     return (
         <div
-            className="w-full h-full pb-32 md:pb-0"
+            className={`w-full h-full pb-32 md:pb-0 theme-${theme}`} // Apply theme class
             onClick={handleContainerClick}
         >
             <OutputDisplay />
             <CommandInput />
             <MobileControls />
+            <LightModeModal />
         </div>
     );
 };
