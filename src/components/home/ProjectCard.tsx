@@ -4,16 +4,18 @@ import { ArrowUpRight } from 'lucide-react';
 interface ProjectCardProps {
     title: string;
     description: string;
-    tags?: string[];
     year: string;
     image: string;
-    link?: string;
     color?: string; // Optional accent color class
+    onClick?: () => void;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ title, description, year, image, link, color = "bg-blue-500" }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ title, description, year, image, color, onClick }) => {
     return (
-        <a href={link} target="_blank" rel="noopener noreferrer" className="group block relative overflow-hidden rounded-2xl bg-charcoal-light hover:translate-y-[-4px] transition-all duration-300">
+        <div
+            onClick={onClick}
+            className="group relative bg-charcoal-light rounded-xl overflow-hidden cursor-pointer border border-white/5 hover:border-white/20 transition-all duration-300 hover:transform hover:-translate-y-1"
+        >
             {/* Image Section */}
             <div className={`aspect-[4/3] w-full relative overflow-hidden ${color}`}>
                 {/* Placeholder gradient if no image, or actual image */}
@@ -39,7 +41,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ title, description, year, ima
                     {description}
                 </p>
             </div>
-        </a>
+        </div>
     );
 };
 

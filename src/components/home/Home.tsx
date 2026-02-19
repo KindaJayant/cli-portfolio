@@ -1,13 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Sidebar from './Sidebar';
 import ProjectCard from './ProjectCard';
-import { Terminal, ArrowUpRight } from 'lucide-react';
+import { Terminal, ArrowUpRight, X, ExternalLink, Github } from 'lucide-react';
+import { projects } from '../../data/projects';
+import { resume } from '../../data/resume';
 
 interface HomeProps {
     onSwitchToTerminal: () => void;
 }
 
 const Home: React.FC<HomeProps> = ({ onSwitchToTerminal }) => {
+    const [selectedProject, setSelectedProject] = useState<any>(null);
+    const [showAllProjects, setShowAllProjects] = useState(false);
+
+    // Prevent body scroll when modal is open
+    React.useEffect(() => {
+        if (selectedProject || showAllProjects) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+    }, [selectedProject, showAllProjects]);
     return (
         <div className="min-h-screen bg-black font-sans text-soft-white selection:bg-white/20">
             <Sidebar />
@@ -21,7 +34,7 @@ const Home: React.FC<HomeProps> = ({ onSwitchToTerminal }) => {
                         onClick={onSwitchToTerminal}
                         className="absolute top-6 right-6 z-10 flex items-center gap-2 px-4 py-2 bg-charcoal-light/50 hover:bg-white/10 border border-white/5 rounded-full text-xs font-mono text-gray-400 hover:text-white transition-all backdrop-blur-sm group"
                     >
-                        <Terminal size={14} className="group-hover:text-terminal-green transition-colors" />
+                        <Terminal size={14} className="group-hover:text-white transition-colors" />
                         <span>Switch to CLI</span>
                         <span className="opacity-0 group-hover:opacity-100 transition-opacity ml-1">→</span>
                     </button>
@@ -49,7 +62,7 @@ const Home: React.FC<HomeProps> = ({ onSwitchToTerminal }) => {
 
                                     <div className="flex gap-4 pt-4">
                                         <span className="flex items-center gap-2 text-xs font-mono text-gray-600">
-                                            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                                            <span className="w-2 h-2 bg-gray-500 rounded-full animate-pulse"></span>
                                             Open for opportunities
                                         </span>
                                     </div>
@@ -68,76 +81,75 @@ const Home: React.FC<HomeProps> = ({ onSwitchToTerminal }) => {
                             </div>
                         </section>
 
-                        {/* Work Section */}
-                        <section id="work" className="mb-32">
+                        {/* Projects Section (formerly Work) */}
+                        <section id="projects" className="mb-32">
                             <div className="flex items-baseline justify-between mb-12 border-b border-white/5 pb-4">
-                                <h2 className="text-2xl font-bold text-white">Work</h2>
-                                <span className="text-sm text-gray-500">Selected systems & projects</span>
+                                <h2 className="text-2xl font-bold text-white">Projects</h2>
+                                <span className="text-sm text-gray-500">My best work</span>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                <ProjectCard
-                                    title="Voice Interview Platform"
-                                    description="AI-assisted mock interview system with real-time streaming evaluation and feedback."
-                                    year="2025"
-                                    image="https://images.unsplash.com/photo-1589254065878-42c9da997008?w=800&auto=format&fit=crop&q=60"
-                                    color="bg-indigo-500/20"
-                                />
-                                <ProjectCard
-                                    title="LMS Platform"
-                                    description="Assessment-focused learning system with dynamic AI feedback and progress tracking."
-                                    year="2024"
-                                    image="https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=800&auto=format&fit=crop&q=60"
-                                    color="bg-emerald-500/20"
-                                />
-                                <ProjectCard
-                                    title="Stock Scoring Tool"
-                                    description="Quant-based ranking engine for retail investors processing 5000+ equities."
-                                    year="2024"
-                                    image="https://images.unsplash.com/photo-1611974765270-ca1258634369?w=800&auto=format&fit=crop&q=60"
-                                    color="bg-orange-500/20"
-                                />
+                                {projects.slice(0, 3).map((project) => (
+                                    <ProjectCard
+                                        key={project.id}
+                                        title={project.title}
+                                        description={project.description}
+                                        year="2024"
+                                        image="https://images.unsplash.com/photo-1589254065878-42c9da997008?w=800&auto=format&fit=crop&q=60" // Placeholder
+                                        color="bg-indigo-500/20"
+                                        onClick={() => setSelectedProject(project)}
+                                    />
+                                ))}
                             </div>
 
                             <div className="mt-8 text-right">
-                                <a href="#projects" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-white transition-colors">
+                                <button
+                                    onClick={() => setShowAllProjects(true)}
+                                    className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-white transition-colors"
+                                >
                                     View all projects <ArrowUpRight size={14} />
-                                </a>
+                                </button>
                             </div>
                         </section>
 
-                        {/* Story Section */}
-                        <section id="about" className="mb-20">
+                        {/* Experience Section */}
+                        <section id="experience" className="mb-32">
                             <div className="flex items-baseline justify-between mb-12 border-b border-white/5 pb-4">
-                                <h2 className="text-2xl font-bold text-white">Where it all started</h2>
+                                <h2 className="text-2xl font-bold text-white">Experience</h2>
                             </div>
 
-                            <div className="bg-charcoal-light/50 rounded-2xl p-8 border border-white/5 flex flex-col md:flex-row gap-12 items-center">
-                                <div className="w-full md:w-1/3 aspect-square rounded-xl overflow-hidden bg-gray-800">
-                                    <img
-                                        src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&auto=format&fit=crop&q=60"
-                                        alt="University Days"
-                                        className="w-full h-full object-cover opacity-70 hover:opacity-100 transition-opacity"
-                                    />
-                                </div>
-                                <div className="flex-1 space-y-6">
-                                    <h3 className="text-xl font-bold text-white">From Hello World to AI Systems</h3>
-                                    <p className="text-gray-400 leading-relaxed">
-                                        My developer journey began in college with a simple curiosity about how things worked under the hood.
-                                        What started as building basic scripts evolved into a passion for scalable systems and artificial intelligence.
-                                        Today, I focus on bridging the gap between theoretical AI models and practical, user-centric applications,
-                                        always striving to build tools that genuinely solve problems.
-                                    </p>
-
-                                    <div className="flex gap-4 pt-4">
-                                        <button className="px-6 py-2 bg-white text-black text-sm font-bold rounded-full hover:bg-gray-200 transition-colors">
-                                            More About Me
-                                        </button>
-                                        <a href="mailto:iamjayant246@gmail.com" className="px-6 py-2 border border-white/10 text-white text-sm font-medium rounded-full hover:bg-white/5 transition-colors">
-                                            Email Me
-                                        </a>
+                            <div className="space-y-12">
+                                {resume.internships.map((job, index) => (
+                                    <div key={index} className="flex flex-col md:flex-row gap-8 group">
+                                        <div className="w-full md:w-48 shrink-0 text-gray-500 font-mono text-sm pt-1">
+                                            {job.startDate} — {job.endDate}
+                                        </div>
+                                        <div className="flex-1 space-y-4">
+                                            <div>
+                                                <h3 className="text-xl font-bold text-white group-hover:text-gray-300 transition-colors">{job.position}</h3>
+                                                <div className="text-gray-400">{job.company} • {job.location}</div>
+                                            </div>
+                                            <ul className="space-y-2 text-gray-400 leading-relaxed">
+                                                {job.highlights.map((highlight, i) => (
+                                                    <li key={i} className="flex items-start gap-2">
+                                                        <span className="text-gray-600 mt-1.5 text-[10px]">▹</span>
+                                                        <span>{highlight}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
                                     </div>
-                                </div>
+                                ))}
+                            </div>
+                        </section>
+
+                        {/* Creative Suite Section */}
+                        <section id="creative-suite" className="mb-20">
+                            <div className="flex items-baseline justify-between mb-12 border-b border-white/5 pb-4">
+                                <h2 className="text-2xl font-bold text-white">Creative Suite</h2>
+                            </div>
+                            <div className="p-12 border border-dashed border-white/10 rounded-xl text-center">
+                                <p className="text-gray-500">Coming soon...</p>
                             </div>
                         </section>
 
@@ -149,6 +161,88 @@ const Home: React.FC<HomeProps> = ({ onSwitchToTerminal }) => {
                     </div>
                 </div>
             </main>
+
+            {/* Project Detail Modal */}
+            {selectedProject && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+                    <div className="bg-charcoal max-w-2xl w-full rounded-2xl border border-white/10 shadow-2xl overflow-hidden relative" onClick={e => e.stopPropagation()}>
+                        <button
+                            onClick={() => setSelectedProject(null)}
+                            className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-white/10 rounded-full text-white/70 hover:text-white transition-colors z-10"
+                        >
+                            <X size={20} />
+                        </button>
+
+                        <div className="h-64 bg-charcoal-light relative">
+                            <img
+                                src="https://images.unsplash.com/photo-1589254065878-42c9da997008?w=800&auto=format&fit=crop&q=60"
+                                alt={selectedProject.title}
+                                className="w-full h-full object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-charcoal to-transparent" />
+                        </div>
+
+                        <div className="p-8 -mt-12 relative">
+                            <h2 className="text-3xl font-bold text-white mb-2">{selectedProject.title}</h2>
+                            <div className="flex flex-wrap gap-2 mb-6">
+                                {selectedProject.tech.map((tech: string) => (
+                                    <span key={tech} className="px-3 py-1 bg-white/5 border border-white/5 rounded-full text-xs text-gray-300 font-mono">
+                                        {tech}
+                                    </span>
+                                ))}
+                            </div>
+
+                            <p className="text-gray-300 leading-relaxed mb-8">
+                                {selectedProject.description}
+                            </p>
+
+                            <div className="flex gap-4">
+                                {selectedProject.live && (
+                                    <a href={selectedProject.live} target="_blank" rel="noopener noreferrer" className="flex-1 py-3 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
+                                        <ExternalLink size={18} /> Live Demo
+                                    </a>
+                                )}
+                                {selectedProject.github && (
+                                    <a href={selectedProject.github} target="_blank" rel="noopener noreferrer" className="flex-1 py-3 border border-white/10 hover:bg-white/5 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2">
+                                        <Github size={18} /> Source Code
+                                    </a>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* All Projects Modal */}
+            {showAllProjects && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-md animate-in fade-in duration-200">
+                    <div className="w-full h-full max-w-6xl mx-auto flex flex-col">
+                        <div className="flex justify-between items-center py-6 border-b border-white/10 mb-8">
+                            <h2 className="text-2xl font-bold text-white">All Projects</h2>
+                            <button
+                                onClick={() => setShowAllProjects(false)}
+                                className="p-2 hover:bg-white/10 rounded-full text-gray-400 hover:text-white transition-colors"
+                            >
+                                <X size={24} />
+                            </button>
+                        </div>
+
+                        <div className="overflow-y-auto pb-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {projects.map((project) => (
+                                <ProjectCard
+                                    key={project.id}
+                                    title={project.title}
+                                    description={project.description}
+                                    year="2024"
+                                    image="https://images.unsplash.com/photo-1589254065878-42c9da997008?w=800&auto=format&fit=crop&q=60"
+                                    color="bg-charcoal"
+                                    onClick={() => setSelectedProject(project)}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

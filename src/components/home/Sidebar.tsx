@@ -23,7 +23,7 @@ const Sidebar: React.FC = () => {
             {/* Navigation */}
             <nav className="flex-1">
                 <ul className="flex flex-col gap-2">
-                    {['Home', 'Work', 'Projects', 'Creative Suite', 'About'].map((item) => (
+                    {['Home', 'Projects', 'Experience', 'Creative Suite'].map((item) => (
                         <li key={item}>
                             <a
                                 href={`#${item.toLowerCase().replace(' ', '-')}`}
