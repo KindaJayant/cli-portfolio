@@ -4,47 +4,42 @@ import type { Project } from '../../data/projects';
 
 interface ProjectCardProps {
     project: Project;
-    image: string;
-    color?: string; // Optional accent color class
+    color?: string;
     onClick?: () => void;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, image, color, onClick }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, color = 'from-slate-500/20 to-transparent', onClick }) => {
     return (
-        <div
+        <button
+            type="button"
             onClick={onClick}
-            className="group relative bg-charcoal-light rounded-xl overflow-hidden cursor-pointer border border-white/5 hover:border-white/20 transition-all duration-300 hover:transform hover:-translate-y-1"
+            className="group relative overflow-hidden rounded-xl border border-white/5 bg-charcoal-light text-left transition-all duration-300 hover:-translate-y-1 hover:border-white/20"
         >
-            {/* Image Section */}
-            <div className={`aspect-[4/3] w-full relative overflow-hidden ${color}`}>
-                {/* Placeholder gradient if no image, or actual image */}
-                <img
-                    src={image}
-                    alt={project.title}
-                    className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
-                />
-                <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-xs font-mono text-white/80 border border-white/10">
-                    {project.year}
-                </div>
-                <div className="absolute left-4 bottom-4 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full text-[11px] uppercase tracking-widest font-mono text-white/80 border border-white/10">
-                    {project.category}
+            <div className={`relative overflow-hidden border-b border-white/5 bg-gradient-to-br ${color} px-6 py-5`}>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.12),_transparent_40%)]" />
+                <div className="relative flex items-start justify-between gap-4">
+                    <div className="space-y-3">
+                        <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-mono uppercase tracking-widest text-white/75">
+                            {project.category}
+                        </div>
+                        <div>
+                            <h3 className="text-2xl font-semibold tracking-tight text-white">{project.title}</h3>
+                            <p className="mt-2 text-[11px] uppercase tracking-[0.22em] text-gray-400">{project.signal}</p>
+                        </div>
+                    </div>
+                    <div className="rounded-full border border-white/10 bg-black/30 px-3 py-1 text-xs font-mono text-white/70">
+                        {project.year}
+                    </div>
                 </div>
             </div>
 
-            {/* Content Section */}
             <div className="p-6">
-                <div className="flex justify-between items-start mb-3">
-                    <h3 className="text-xl font-bold text-soft-white group-hover:text-white transition-colors">
-                        {project.title}
-                    </h3>
-                    <ArrowUpRight className="text-gray-500 group-hover:text-white transition-colors" size={20} />
+                <div className="mb-3 flex items-start justify-between gap-4">
+                    <div className="max-w-[85%]">
+                        <p className="text-sm leading-relaxed text-gray-300">{project.description}</p>
+                    </div>
+                    <ArrowUpRight className="text-gray-500 transition-colors group-hover:text-white" size={20} />
                 </div>
-                <p className="text-gray-500 text-[11px] uppercase tracking-[0.22em] mb-3">
-                    {project.signal}
-                </p>
-                <p className="text-gray-400 text-sm leading-relaxed">
-                    {project.description}
-                </p>
                 <div className="mt-4 flex flex-wrap gap-2">
                     {project.tech.slice(0, 3).map((item) => (
                         <span key={item} className="rounded-full border border-white/10 px-2.5 py-1 text-[11px] font-mono text-gray-300">
@@ -53,7 +48,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, image, color, onClic
                     ))}
                 </div>
             </div>
-        </div>
+        </button>
     );
 };
 
