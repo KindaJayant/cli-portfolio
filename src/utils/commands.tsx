@@ -26,6 +26,104 @@ export interface Command {
     execute: (args: string[], actions: TerminalActions) => CommandOutput;
 }
 
+const findProject = (query: string) => {
+    const normalized = query.toLowerCase();
+    return projectsData.find((project) =>
+        project.id.toString() === normalized ||
+        project.slug.toLowerCase() === normalized ||
+        project.title.toLowerCase().includes(normalized)
+    );
+};
+
+const impactMetrics = [
+    { label: 'Voice-to-text accuracy', value: '90%' },
+    { label: 'Users reached', value: '4,000+' },
+    { label: 'Equities scored', value: '5,000+' },
+    { label: 'Concurrent workflows', value: '10+' },
+];
+
+const stackGroups = [
+    {
+        title: 'Full-Stack Apps',
+        level: 5,
+        tools: ['React', 'Next.js', 'TypeScript', 'APIs'],
+    },
+    {
+        title: 'AI Systems',
+        level: 5,
+        tools: ['RAG pipelines', 'Vapi', 'Prompt design', 'LLM orchestration'],
+    },
+    {
+        title: 'Backend',
+        level: 4,
+        tools: ['Node.js', 'Supabase', 'Firebase', 'APIs'],
+    },
+    {
+        title: 'Automation',
+        level: 4,
+        tools: ['n8n', 'Async jobs', 'Workflow design'],
+    },
+];
+
+const renderBars = (level: number) => `${'█'.repeat(level)}${'░'.repeat(5 - level)}`;
+
+const renderProjectSection = (project: Project) => (
+    <div className="flex flex-col gap-4 max-w-3xl">
+        <div>
+            <div className="text-xs uppercase tracking-widest text-theme-dim">Case Study</div>
+            <div className="text-2xl font-bold text-theme-text">{project.title}</div>
+            <div className="text-theme-dim mt-1">Slug: {project.slug}</div>
+        </div>
+
+        <div className="grid gap-3 md:grid-cols-[160px_1fr] text-sm">
+            <div className="text-theme-accent font-bold">Problem</div>
+            <div className="text-theme-dim">{project.description}</div>
+
+            <div className="text-theme-accent font-bold">Stack</div>
+            <div className="text-theme-dim">{project.tech.join(' | ')}</div>
+
+            <div className="text-theme-accent font-bold">Signals</div>
+            <div className="text-theme-dim">
+                {project.slug === 'analyst-project' && 'Autonomous research loop, live financial data ingestion, search resilience, and structured 6-section outputs.'}
+                {project.slug === 'codebase-onboarding-agent' && 'LangGraph DAG orchestration, Tree-sitter parsing, vector search, and streamed codebase analysis.'}
+                {project.slug === 'promptops-tool' && 'Prompt versioning, rollback, side-by-side diffs, test execution, and developer-facing workflow tooling.'}
+                {project.slug === 'ai-interview' && 'Voice AI interview sessions, transcript-driven feedback, authenticated dashboards, and reusable full-stack architecture.'}
+                {project.slug === 'llm-evaluations' && 'Batch benchmark runs, comparison views, scoring heuristics, and evaluation-driven model iteration.'}
+            </div>
+
+            <div className="text-theme-accent font-bold">Next Step</div>
+            <div className="text-theme-dim">
+                {project.github ? 'Open the source link below or ask Jayant AI why this project matters for your use case.' : 'Ask Jayant AI to compare this project with another build.'}
+            </div>
+        </div>
+
+        <div className="flex gap-4 text-sm">
+            {project.github && (
+                <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white hover:text-theme-text underline decoration-dashed"
+                >
+                    [GitHub]
+                </a>
+            )}
+            {project.live && project.live !== '#' ? (
+                <a
+                    href={project.live}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white hover:text-theme-text underline decoration-dashed"
+                >
+                    [Live Demo]
+                </a>
+            ) : (
+                <span className="text-theme-dim italic">Live deployment not linked yet.</span>
+            )}
+        </div>
+    </div>
+);
+
 export const commands: Record<string, Command> = {
     banner: {
         name: 'banner',
@@ -38,9 +136,9 @@ export const commands: Record<string, Command> = {
         description: 'List all available commands',
         execute: () => {
             return (
-                <div className="flex flex-col gap-2">
-                    <div>Available commands:</div>
-                    <div className="grid grid-cols-[120px_1fr] gap-2">
+                <div className="flex flex-col gap-4">
+                    <div className="text-theme-text font-bold">Available commands</div>
+                    <div className="grid grid-cols-[140px_1fr] gap-2">
                         {Object.values(commands)
                             .filter(cmd => !cmd.hidden)
                             .map((cmd) => (
@@ -49,6 +147,35 @@ export const commands: Record<string, Command> = {
                                     <span className="text-theme-dim">- {cmd.description}</span>
                                 </div>
                             ))}
+                    </div>
+                    <div className="text-theme-dim text-sm">
+                        Suggested journey: <span className="text-theme-text">neofetch</span> {'->'} <span className="text-theme-text">impact</span> {'->'} <span className="text-theme-text">timeline</span> {'->'} <span className="text-theme-text">case-study analyst-project</span> {'->'} <span className="text-theme-text">chat jayant</span>
+                    </div>
+                </div>
+            );
+        },
+    },
+    neofetch: {
+        name: 'neofetch',
+        description: 'Show a workstation-style profile summary',
+        execute: () => {
+            return (
+                <div className="grid gap-6 md:grid-cols-[auto_1fr] items-start">
+                    <pre className="text-theme-text text-xs leading-tight">{String.raw`
+      _____                       __
+     / ___/____  ____ ___________/ /_
+     \__ \/ __ \/ __ \`/ ___/ ___/ __/
+    ___/ / /_/ / /_/ / /  / /__/ /_
+   /____/ .___/\__,_/_/   \___/\__/
+       /_/`}</pre>
+                    <div className="grid gap-2 text-sm">
+                        <div><span className="text-theme-accent">name</span>: {resume.basics.name}</div>
+                        <div><span className="text-theme-accent">role</span>: Full-Stack + AI Engineer</div>
+                        <div><span className="text-theme-accent">location</span>: {resume.basics.location}</div>
+                        <div><span className="text-theme-accent">focus</span>: performant interfaces, AI products, workflow systems</div>
+                        <div><span className="text-theme-accent">status</span>: open to opportunities</div>
+                        <div><span className="text-theme-accent">highlights</span>: {impactMetrics.map((item) => `${item.value} ${item.label}`).join(' | ')}</div>
+                        <div><span className="text-theme-accent">next</span>: try `impact`, `timeline`, `stack`, or `case-study analyst-project`</div>
                     </div>
                 </div>
             );
@@ -148,7 +275,51 @@ export const commands: Record<string, Command> = {
                             <span className="text-theme-text">[{project.id}]</span> {project.title}
                         </div>
                     ))}
-                    <div className="text-theme-dim mt-2 text-sm">Type 'open &lt;number&gt;' or 'open &lt;name&gt;' to view details.</div>
+                    <div className="text-theme-dim mt-2 text-sm">Type `open &lt;number&gt;`, `project &lt;slug&gt;`, or `case-study &lt;name&gt;` to drill in.</div>
+                </div>
+            );
+        },
+    },
+    impact: {
+        name: 'impact',
+        description: 'Show headline metrics and proof points',
+        execute: () => {
+            return (
+                <div className="flex flex-col gap-4">
+                    <div className="text-lg font-bold border-b border-theme-text/30 pb-2 w-max">Impact Snapshot</div>
+                    <div className="grid gap-3 md:grid-cols-2">
+                        {impactMetrics.map((metric) => (
+                            <div key={metric.label} className="border border-theme-text/20 bg-theme-text/5 rounded-sm px-4 py-3">
+                                <div className="text-2xl font-bold text-theme-text">{metric.value}</div>
+                                <div className="text-sm text-theme-dim">{metric.label}</div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="text-theme-dim text-sm">
+                        Proof lives across `analyst-project`, `codebase-onboarding-agent`, `promptops-tool`, `ai-interview`, and `llm-evaluations`.
+                    </div>
+                </div>
+            );
+        },
+    },
+    timeline: {
+        name: 'timeline',
+        description: 'Render a quick career and project timeline',
+        execute: () => {
+            const entries = [
+                '2022  | Started BE in Computer Science and Business Systems at Thapar',
+                '2024  | Web Developer Intern at NVISH Solutions',
+                '2024  | Built Prepwise AI Interview and PromptOps Tool',
+                '2025  | Built LLM Evaluation System and Codebase Onboarding Agent',
+                '2026  | Shipped ResearchAgent for autonomous market and company research',
+            ];
+
+            return (
+                <div className="flex flex-col gap-3">
+                    <div className="text-lg font-bold border-b border-theme-text/30 pb-2 w-max">Timeline</div>
+                    <div className="font-mono text-sm whitespace-pre-wrap text-theme-dim">
+                        {entries.map((entry, index) => `${index === entries.length - 1 ? '└' : '├'}─ ${entry}`).join('\n')}
+                    </div>
                 </div>
             );
         },
@@ -170,17 +341,30 @@ export const commands: Record<string, Command> = {
         execute: (args) => {
             if (args.length === 0) return 'Usage: open <id | slug>';
 
-            const query = args[0].toLowerCase();
-            const project = projectsData.find(p =>
-                p.id.toString() === query ||
-                p.slug.toLowerCase() === query ||
-                p.title.toLowerCase().includes(query)
-            );
+            const project = findProject(args.join(' '));
 
             if (!project) return `Project not found: ${args[0]}`;
 
             return { type: 'project', project };
         },
+    },
+    project: {
+        name: 'project',
+        description: 'Open a deeper project case study',
+        execute: (args) => {
+            if (args.length === 0) return 'Usage: project <id | slug | title>';
+
+            const project = findProject(args.join(' '));
+
+            if (!project) return `Project not found: ${args.join(' ')}`;
+
+            return { type: 'component', content: renderProjectSection(project) };
+        },
+    },
+    'case-study': {
+        name: 'case-study',
+        description: 'Alias for project deep dives',
+        execute: (args, actions) => commands.project.execute(args, actions),
     },
     skills: {
         name: 'skills',
@@ -197,6 +381,24 @@ export const commands: Record<string, Command> = {
                         <span className="text-theme-text font-bold">Professional Skills: </span>
                         <span className="text-theme-dim">{resume.skills.other.join(', ')}</span>
                     </div>
+                </div>
+            );
+        },
+    },
+    stack: {
+        name: 'stack',
+        description: 'Visualize core strengths with signal bars',
+        execute: () => {
+            return (
+                <div className="flex flex-col gap-4">
+                    <div className="text-lg font-bold border-b border-theme-text/30 pb-2 w-max">Stack Signal</div>
+                    {stackGroups.map((group) => (
+                        <div key={group.title} className="grid gap-1 md:grid-cols-[140px_120px_1fr] text-sm items-start">
+                            <div className="text-theme-text font-bold">{group.title}</div>
+                            <div className="font-mono text-theme-accent">{renderBars(group.level)}</div>
+                            <div className="text-theme-dim">{group.tools.join(' | ')}</div>
+                        </div>
+                    ))}
                 </div>
             );
         },
