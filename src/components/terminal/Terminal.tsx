@@ -99,7 +99,7 @@ const Terminal: React.FC = () => {
 
     return (
         <div
-            className={`w-full h-full pb-32 md:pb-0 theme-${theme}`} // Apply theme class
+            className={`w-full h-full min-w-0 overflow-x-hidden pb-32 md:pb-0 theme-${theme}`} // Apply theme class
             onClick={handleContainerClick}
         >
             <OutputDisplay />

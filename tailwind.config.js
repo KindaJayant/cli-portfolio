@@ -21,7 +21,7 @@ export default {
       },
       fontFamily: {
         mono: ['"Fira Code"', 'monospace'],
-        sans: ['"Manrope"', 'sans-serif'],
+        sans: ['Helvetica', 'Arial', 'sans-serif'],
       },
       animation: {
         'blink': 'blink 1s step-end infinite',

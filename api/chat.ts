@@ -32,21 +32,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     const projectsContext = `
-    1. AI Voice Interview Platform (id: 1, slug: voice-interview)
-       - Tech: Next.js, Vapi, React.js, Firebase
-       - Desc: AI interview simulator, 90% voice-to-text accuracy, low latency.
-    2. LMS SaaS AI Platform (id: 2, slug: lms-saas)
-       - Tech: Next.js, Supabase, Clerk, Stripe, Vapi
-       - Desc: Full-stack LMS with AI voice tutoring and payments.
-    3. AI Workflow Engine (id: 3, slug: rag-engine)
-       - Tech: LLM, RAG, Async Processing
-       - Desc: Scalable backend with semantic retrieval and async jobs.
-    4. AI Stock Scoring System (id: 4, slug: stock-scoring)
-       - Tech: n8n, Gemini LLM
-       - Desc: Automated stock evaluation system for 5000+ equities.
+    1. ResearchAgent (id: 1, slug: analyst-project)
+       - Tech: Next.js, TypeScript, OpenRouter, Gemini 2.0 Flash, Yahoo Finance, RSS
+       - Desc: Autonomous stock and company research agent generating structured briefs from live financial and news data.
+    2. Codebase Onboarding Agent (id: 2, slug: codebase-onboarding-agent)
+       - Tech: FastAPI, LangGraph, Tree-sitter, ChromaDB, OpenRouter, WebSockets
+       - Desc: Autonomous codebase intelligence engine for structured onboarding reports over large repositories.
+    3. PromptOps Tool (id: 3, slug: promptops-tool)
+       - Tech: React, Vite, FastAPI, SQLAlchemy, SQLite, OpenRouter
+       - Desc: Prompt version control and evaluation workspace with diffing, rollback, analytics, and CLI workflows.
+    4. Prepwise AI Interview (id: 4, slug: ai-interview)
+       - Tech: Next.js, Firebase, Vapi, Gemini, Tailwind CSS, Zod
+       - Desc: AI mock interview platform with voice sessions, transcript capture, feedback scoring, and user dashboards.
+    5. LLM Evaluation System (id: 5, slug: llm-evaluations)
+       - Tech: Python, Streamlit, Evaluation Pipelines, Rule-based Scoring
+       - Desc: Benchmarking system for prompt and model variants with batch runs, scoring logic, and performance tracking.
     `;
 
-    const systemPrompt = `You are "Jayant AI", the intelligent portfolio assistant of Jayant Singh Bisht, a frontend and AI-focused engineer.
+    const systemPrompt = `You are "Jayant AI", the intelligent portfolio assistant of Jayant Singh Bisht, a full-stack and AI-focused engineer targeting software engineering roles.
 
 Your role is to answer questions about Jayant’s skills, projects, experience, and technical thinking.
 

@@ -33,6 +33,40 @@ interface TerminalContextType {
 
 const TerminalContext = createContext<TerminalContextType | undefined>(undefined);
 
+const getClosestCommands = (input: string, options: string[]) => {
+    const normalizedInput = input.toLowerCase();
+
+    const levenshtein = (a: string, b: string) => {
+        const dp = Array.from({ length: a.length + 1 }, () => Array<number>(b.length + 1).fill(0));
+
+        for (let i = 0; i <= a.length; i++) dp[i][0] = i;
+        for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+
+        for (let i = 1; i <= a.length; i++) {
+            for (let j = 1; j <= b.length; j++) {
+                const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+                dp[i][j] = Math.min(
+                    dp[i - 1][j] + 1,
+                    dp[i][j - 1] + 1,
+                    dp[i - 1][j - 1] + cost
+                );
+            }
+        }
+
+        return dp[a.length][b.length];
+    };
+
+    return options
+        .map((option) => ({
+            option,
+            score: option.startsWith(normalizedInput) ? 0 : levenshtein(normalizedInput, option),
+        }))
+        .sort((left, right) => left.score - right.score)
+        .filter(({ score, option }) => score <= 3 || option.includes(normalizedInput))
+        .slice(0, 3)
+        .map(({ option }) => option);
+};
+
 export const TerminalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [history, setHistory] = useState<HistoryItem[]>([]);
     const [bootCompleted, setBootCompleted] = useState(false);
@@ -114,7 +148,11 @@ export const TerminalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                 clearHistory();
             }
         } else {
-            pushToHistory(trimmed, `Command not found: ${cmdName}. Type 'help' for available commands.`);
+            const suggestions = getClosestCommands(cmdName.toLowerCase(), Object.keys(commands).filter((key) => !commands[key].hidden));
+            const suggestionText = suggestions.length > 0
+                ? ` Did you mean: ${suggestions.map((suggestion) => `'${suggestion}'`).join(', ')}?`
+                : " Type 'help' for available commands.";
+            pushToHistory(trimmed, `Command not found: ${cmdName}.${suggestionText}`);
         }
     }, [clearHistory, pushToHistory]);
 
