@@ -1,21 +1,59 @@
-import React, { useState } from 'react';
-import Sidebar from './Sidebar';
+import React, { useEffect, useState } from 'react';
+import {
+    ArrowUpRight,
+    Boxes,
+    Braces,
+    BrainCircuit,
+    BriefcaseBusiness,
+    Bot,
+    Cloud,
+    Database,
+    GitBranch,
+    Github,
+    Linkedin,
+    Mail,
+    Menu,
+    ServerCog,
+    Terminal,
+    Workflow,
+    X,
+} from 'lucide-react';
 import ProjectCard from './ProjectCard';
-import { Terminal, ArrowUpRight, X, ExternalLink, Github, Menu } from 'lucide-react';
 import { projects, type Project } from '../../data/projects';
 import { resume } from '../../data/resume';
 
-const heroSignals = [
-    'Agent systems',
-    'Full-stack products',
-    'Developer tooling',
-    'Evaluation workflows',
-];
+const heroSignals = ['Agent systems', 'LLMOps', 'Full-stack', 'Eval workflows'];
 
 const headlineMetrics = [
-    { value: '5', label: 'featured builds' },
-    { value: '4,000+', label: 'users reached' },
-    { value: '5,000+', label: 'equities analyzed' },
+    { value: '5', label: 'Projects' },
+    { value: '4k+', label: 'Users' },
+];
+
+const stackItems = [
+    { label: 'Python', icon: BrainCircuit },
+    { label: 'FastAPI', icon: ServerCog },
+    { label: 'Next.js', icon: Boxes },
+    { label: 'LangGraph', icon: Workflow },
+    { label: 'TypeScript', icon: Terminal },
+    { label: 'PostgreSQL', icon: Database },
+    { label: 'n8n', icon: BriefcaseBusiness },
+    { label: 'Redis', icon: Boxes },
+    { label: 'React', icon: Braces },
+    { label: 'GenAI', icon: Bot },
+    { label: 'Promptfoo', icon: GitBranch },
+    { label: 'MongoDB', icon: Database },
+    { label: 'Firebase', icon: Cloud },
+    { label: 'AWS', icon: Cloud },
+    { label: 'SQL', icon: Database },
+    { label: 'ChromaDB', icon: Database },
+    { label: 'LangChain', icon: Workflow },
+    { label: 'Agentic AI', icon: Bot },
+];
+
+const navItems = [
+    { label: 'Work', href: '#projects' },
+    { label: 'Experience', href: '#experience' },
+    { label: 'Resume', href: resume.basics.profiles.resume, external: true },
 ];
 
 const Home: React.FC = () => {
@@ -23,252 +61,328 @@ const Home: React.FC = () => {
     const [showAllProjects, setShowAllProjects] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-    React.useEffect(() => {
-        if (selectedProject || showAllProjects || mobileMenuOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'unset';
-        }
+    useEffect(() => {
+        document.body.style.overflow = selectedProject || showAllProjects || mobileMenuOpen ? 'hidden' : 'unset';
     }, [selectedProject, showAllProjects, mobileMenuOpen]);
 
     return (
-        <div className="min-h-screen bg-black font-sans text-soft-white selection:bg-white/20">
-            <div className="fixed inset-x-0 top-0 z-[120] px-4 pt-4 md:hidden">
-                <div className="mx-auto flex max-w-5xl items-center justify-between rounded-2xl border border-white/10 bg-charcoal-dark/95 px-4 py-3 shadow-2xl backdrop-blur-md">
+        <div className="min-h-screen bg-[#0c0c0c] text-[#c8c3bb]">
+            <header className="sticky top-0 z-40 border-b border-[#1f1f1f] bg-[#0f0d0c]/95 backdrop-blur">
+                <div className="mx-auto grid max-w-[1480px] grid-cols-[1fr_auto] items-center gap-4 px-5 py-4 md:grid-cols-[1fr_auto_1fr] md:px-8">
+                    <a href="#home" className="justify-self-start font-display text-[1.45rem] leading-none text-[#f2eee8]">
+                        {resume.basics.name}
+                    </a>
+
+                    <nav className="hidden items-center justify-self-center md:flex md:gap-8">
+                        {navItems.map((item) => (
+                            <a
+                                key={item.label}
+                                href={item.href}
+                                target={item.external ? '_blank' : undefined}
+                                rel={item.external ? 'noopener noreferrer' : undefined}
+                                className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#7f7a72] transition-colors hover:text-[#ece8e1]"
+                            >
+                                {item.label}
+                                {item.external ? ' ↗' : ''}
+                            </a>
+                        ))}
+                    </nav>
+
+                    <div className="hidden items-center justify-self-end gap-3 md:flex">
+                        <a
+                            href={`mailto:${resume.basics.email}`}
+                            className="rounded-full border border-[#37322c] px-4 py-2 font-mono text-[11px] uppercase tracking-[0.12em] text-[#ece8e1] transition-colors hover:border-[#575048] hover:bg-[#171412]"
+                        >
+                            Contact
+                        </a>
+                        <a
+                            href="#cli"
+                            className="rounded-full border border-[#26221f] px-4 py-2 font-mono text-[11px] uppercase tracking-[0.12em] text-[#90887f] transition-colors hover:border-[#413a33] hover:text-[#ece8e1]"
+                        >
+                            Switch to CLI
+                        </a>
+                    </div>
+
                     <button
                         type="button"
                         onClick={() => setMobileMenuOpen(true)}
-                        className="flex items-center gap-2 rounded-full border border-white/10 px-3 py-2 text-xs font-mono text-gray-300 transition-colors hover:bg-white/5 hover:text-white"
+                        className="justify-self-end rounded-full border border-[#2a2521] p-2 text-[#9d958b] md:hidden"
                     >
-                        <Menu size={16} />
-                        <span>Menu</span>
+                        <Menu size={18} />
                     </button>
-
-                    <a
-                        href="#cli"
-                        className="flex items-center gap-2 rounded-full border border-terminal-green/30 bg-terminal-green/10 px-3 py-2 text-xs font-mono text-terminal-green transition-colors hover:bg-terminal-green/20"
-                    >
-                        <Terminal size={16} />
-                        <span>Switch to CLI</span>
-                    </a>
                 </div>
-            </div>
+            </header>
 
-            <Sidebar mobileOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
+            {mobileMenuOpen && (
+                <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm md:hidden">
+                    <div className="ml-auto flex h-full w-[86%] max-w-sm flex-col border-l border-[#1f1f1f] bg-[#100f0e] p-6">
+                        <div className="flex items-center justify-between">
+                            <span className="font-display text-2xl text-[#ece8e1]">Navigate</span>
+                            <button
+                                type="button"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="rounded-full border border-[#2a2521] p-2 text-[#9d958b]"
+                            >
+                                <X size={18} />
+                            </button>
+                        </div>
 
-            <main className="min-h-screen p-4 pt-24 transition-all duration-500 md:ml-72 md:p-8 md:pt-8 lg:ml-80 lg:p-12">
-                <div className="max-w-5xl mx-auto rounded-[2rem] bg-charcoal shadow-2xl overflow-hidden min-h-[calc(100vh-4rem)] relative border border-white/5">
-                    <a
-                        href="#cli"
-                        className="absolute top-6 right-6 z-10 hidden md:flex items-center gap-2 px-4 py-2 bg-charcoal-light/50 hover:bg-white/10 border border-white/5 rounded-full text-xs font-mono text-gray-400 hover:text-white transition-all backdrop-blur-sm group"
-                    >
-                        <Terminal size={14} className="group-hover:text-white transition-colors" />
-                        <span>Switch to CLI</span>
-                        <span className="opacity-0 group-hover:opacity-100 transition-opacity ml-1">{'->'}</span>
-                    </a>
-
-                    <div className="p-8 md:p-16 lg:p-20">
-                        <section id="home" className="mb-28 pt-10">
-                            <div className="flex flex-col-reverse lg:flex-row gap-16 items-start">
-                                <div className="flex-1 space-y-8">
-                                    <div className="space-y-5">
-                                        <span className="text-xs font-bold tracking-[0.35em] text-gray-500 uppercase">
-                                            Full-Stack & AI Engineer
-                                        </span>
-                                        <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-white leading-[1.02] max-w-3xl">
-                                            Building software systems, agent workflows, and developer tools that hold up in the real world.
-                                        </h1>
-                                        <p className="text-lg md:text-xl text-gray-400 leading-relaxed max-w-2xl">
-                                            I am targeting software engineering roles where backend depth, product sense, and strong execution matter.
-                                            Most of my recent work sits at the intersection of AI systems, full-stack product development, and engineering tooling.
-                                        </p>
-                                    </div>
-
-                                    <div className="flex flex-wrap gap-2">
-                                        {heroSignals.map((signal) => (
-                                            <span key={signal} className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-mono text-gray-300">
-                                                {signal}
-                                            </span>
-                                        ))}
-                                    </div>
-
-                                    <div className="grid grid-cols-3 gap-3 max-w-xl">
-                                        {headlineMetrics.map((metric) => (
-                                            <div key={metric.label} className="rounded-2xl border border-white/5 bg-charcoal-light/60 px-4 py-4">
-                                                <div className="text-2xl md:text-3xl font-bold text-white">{metric.value}</div>
-                                                <div className="mt-1 text-[11px] uppercase tracking-[0.24em] text-gray-500">{metric.label}</div>
-                                            </div>
-                                        ))}
-                                    </div>
-
-                                    <div className="flex flex-wrap gap-3 pt-2">
-                                        <a
-                                            href="#projects"
-                                            className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-medium text-black transition-colors hover:bg-gray-200"
-                                        >
-                                            View Projects <ArrowUpRight size={14} />
-                                        </a>
-                                        <a
-                                            href={resume.basics.profiles.resume}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="inline-flex items-center gap-2 rounded-full border border-white/10 px-5 py-3 text-sm font-medium text-gray-200 transition-colors hover:bg-white/5 hover:text-white"
-                                        >
-                                            Open Resume
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <div className="w-full lg:w-80 shrink-0">
-                                    <div className="aspect-[3/4] rounded-2xl overflow-hidden bg-charcoal-light relative shadow-2xl rotate-3 hover:rotate-0 transition-all duration-500">
-                                        <img
-                                            src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
-                                            alt="Jayant Portrait"
-                                            className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-
-                        <section id="projects" className="mb-28">
-                            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12 border-b border-white/5 pb-5">
-                                <div>
-                                    <h2 className="text-3xl font-bold text-white">Selected Projects</h2>
-                                    <p className="mt-2 text-gray-500 max-w-2xl">
-                                        Recent work across autonomous agents, full-stack AI products, evaluation systems, and developer-facing tooling.
-                                    </p>
-                                </div>
-                                <span className="text-sm text-gray-500">Built to show engineering depth, not just visual polish</span>
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                                {projects.slice(0, 3).map((project) => (
-                                    <ProjectCard
-                                        key={project.id}
-                                        project={project}
-                                        image="https://images.unsplash.com/photo-1589254065878-42c9da997008?w=800&auto=format&fit=crop&q=60"
-                                        color="bg-indigo-500/20"
-                                        onClick={() => setSelectedProject(project)}
-                                    />
-                                ))}
-                            </div>
-
-                            <div className="mt-8 text-right">
-                                <button
-                                    onClick={() => setShowAllProjects(true)}
-                                    className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-white transition-colors"
+                        <div className="mt-10 flex flex-col gap-5">
+                            {navItems.map((item) => (
+                                <a
+                                    key={item.label}
+                                    href={item.href}
+                                    target={item.external ? '_blank' : undefined}
+                                    rel={item.external ? 'noopener noreferrer' : undefined}
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="font-mono text-sm uppercase tracking-[0.2em] text-[#c8c3bb]"
                                 >
-                                    View all projects <ArrowUpRight size={14} />
-                                </button>
-                            </div>
-                        </section>
-
-                        <section id="experience" className="mb-20">
-                            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12 border-b border-white/5 pb-5">
-                                <div>
-                                    <h2 className="text-3xl font-bold text-white">Experience</h2>
-                                    <p className="mt-2 text-gray-500 max-w-2xl">
-                                        Roles where I worked on applied AI systems, product workflows, and performance-oriented engineering problems.
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="space-y-12">
-                                {resume.internships.map((job, index) => (
-                                    <div key={index} className="flex flex-col md:flex-row gap-8 group">
-                                        <div className="w-full md:w-48 shrink-0 text-gray-500 font-mono text-sm pt-1">
-                                            {job.startDate} {'->'} {job.endDate}
-                                        </div>
-                                        <div className="flex-1 space-y-4">
-                                            <div>
-                                                <h3 className="text-xl font-bold text-white group-hover:text-gray-300 transition-colors">{job.position}</h3>
-                                                <div className="text-gray-400">{job.company} {'|'} {job.location}</div>
-                                            </div>
-                                            <ul className="space-y-2 text-gray-400 leading-relaxed">
-                                                {job.highlights.map((highlight, i) => (
-                                                    <li key={i} className="flex items-start gap-2">
-                                                        <span className="text-gray-600 mt-1.5 text-[10px]">{'>'}</span>
-                                                        <span>{highlight}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </section>
-
-                        <footer className="text-center text-gray-700 text-xs py-8">
-                            <p>(c) {new Date().getFullYear()} Jayant Singh Bisht. Built with React & Tailwind.</p>
-                        </footer>
+                                    {item.label}
+                                </a>
+                            ))}
+                            <a href="#cli" onClick={() => setMobileMenuOpen(false)} className="font-mono text-sm uppercase tracking-[0.2em] text-[#8f877f]">
+                                Switch to CLI
+                            </a>
+                        </div>
                     </div>
                 </div>
+            )}
+
+            <main id="home" className="mx-auto max-w-[1480px] px-5 py-7 md:px-8 md:py-8">
+                <section className="grid gap-4 lg:grid-cols-[1.55fr_0.75fr]">
+                    <div className="rounded-2xl border border-[#242424] bg-[#141414] p-5 md:p-8">
+                        <div className="mb-6 flex flex-wrap gap-2">
+                            {heroSignals.map((signal) => (
+                                <span
+                                    key={signal}
+                                    className="rounded-md border border-[#2a2a2a] px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-[#716b63]"
+                                >
+                                    {signal}
+                                </span>
+                            ))}
+                        </div>
+
+                        <h1 className="max-w-4xl font-display text-[3.15rem] leading-[0.98] text-[#ece8e1] sm:text-[4rem] lg:text-[4.8rem]">
+                            Building software systems, <em className="font-display italic text-[#b7aea3]">agent workflows,</em> and developer tools
+                        </h1>
+
+                        <p className="mt-6 max-w-2xl text-[16px] leading-8 text-[#91887f]">
+                            Focused on the intersection of deep backend architecture and LLM orchestration. Engineering tools that empower developers and automate complex reasoning.
+                        </p>
+                    </div>
+
+                    <div className="rounded-2xl border border-[#242424] bg-[#141414] p-5 md:p-8">
+                        <div className="flex h-full flex-col">
+                            <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-full border border-[#302c27] bg-[radial-gradient(circle_at_30%_30%,#2b2824_0%,#171615_58%,#121111_100%)] font-display text-5xl text-[#ece8e1]">
+                                JS
+                            </div>
+
+                            <div className="mt-5 text-center">
+                                <h2 className="font-display text-[2rem] leading-none text-[#ece8e1]">{resume.basics.name}</h2>
+                                <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.18em] text-[#726d65]">
+                                    BE CSE · Thapar · Jun 2026
+                                </p>
+                            </div>
+
+                            <div className="mt-8 grid grid-cols-2 gap-4 border-t border-[#242424] pt-6">
+                                {headlineMetrics.map((metric) => (
+                                    <div key={metric.label} className="text-center">
+                                        <div className="font-display text-[2.25rem] leading-none text-[#f0ebe4]">{metric.value}</div>
+                                        <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.22em] text-[#5f5a54]">{metric.label}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section className="mt-4 grid gap-4 lg:grid-cols-[0.72fr_1.28fr]">
+                    <div className="rounded-2xl border border-[#242424] bg-[#141414] p-5 md:p-8">
+                        <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#666058]">Availability</p>
+                        <div className="mt-5 flex items-center gap-3 text-[15px] text-[#ece8e1]">
+                            <span className="h-2 w-2 rounded-full bg-[#5b8b69]" />
+                            <span>Available for full time roles</span>
+                        </div>
+
+                        <p className="mt-10 font-mono text-[10px] uppercase tracking-[0.28em] text-[#666058]">Current focus</p>
+                        <h2 className="mt-4 max-w-sm font-display text-[2.15rem] leading-[1.02] text-[#ece8e1]">
+                            Reliable Multi-Agent Orchestration
+                        </h2>
+                    </div>
+
+                    <div className="rounded-2xl border border-[#242424] bg-[#141414] p-5 md:p-8">
+                        <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#666058]">Technical arsenal</p>
+                        <div className="mt-7 grid gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                            {stackItems.map(({ label, icon: Icon }) => (
+                                <div key={label} className="flex items-center gap-3 text-[#e7e1d8]">
+                                    <Icon size={16} className="text-[#9a9388]" />
+                                    <span className="text-[15px]">{label}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+
+                <section id="projects" className="mt-14">
+                    <div className="mb-7">
+                        <h2 className="font-display text-[3rem] leading-none text-[#ece8e1]">Selected Work</h2>
+                    </div>
+
+                    <div className="grid gap-4 lg:grid-cols-2">
+                        {projects.slice(0, 2).map((project) => (
+                            <ProjectCard key={project.id} project={project} onClick={() => setSelectedProject(project)} />
+                        ))}
+                    </div>
+
+                    <div className="mt-4">
+                        <ProjectCard project={projects[2]} wide onClick={() => setSelectedProject(projects[2])} />
+                    </div>
+
+                    <div className="mt-6 flex justify-end">
+                        <button
+                            type="button"
+                            onClick={() => setShowAllProjects(true)}
+                            className="inline-flex items-center gap-2 rounded-full border border-[#302b26] px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-[#a0998f] transition-colors hover:border-[#4a433b] hover:text-[#ece8e1]"
+                        >
+                            View all projects <ArrowUpRight size={14} />
+                        </button>
+                    </div>
+                </section>
+
+                <section id="experience" className="mt-12 rounded-2xl border border-[#242424] bg-[#141414] p-5 md:p-8">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-[#666058]">Professional journey</p>
+
+                    <div className="mt-8 space-y-8">
+                        {resume.internships.map((job, index) => (
+                            <div
+                                key={job.company}
+                                className={`grid gap-4 md:grid-cols-[1.15fr_0.85fr] md:items-start ${index < resume.internships.length - 1 ? 'border-b border-[#1f1f1f] pb-8' : ''}`}
+                            >
+                                <div>
+                                    <h3 className="font-display text-[2rem] leading-none text-[#ece8e1]">{job.position}</h3>
+                                    <p className="mt-2 text-[15px] text-[#a49b90]">{job.company}</p>
+                                </div>
+
+                                <div className="md:text-right">
+                                    <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#8b8379]">
+                                        {job.startDate} - {job.endDate}
+                                    </p>
+                                    <p className="mt-2 text-[13px] text-[#7a736a]">{job.highlights[0]}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                <footer className="mt-10 flex flex-col gap-5 border-t border-[#1f1f1f] py-8 font-mono text-[10px] uppercase tracking-[0.18em] text-[#6f695f] md:flex-row md:items-center md:justify-between">
+                    <p>© {new Date().getFullYear()}</p>
+                    <div className="flex items-center gap-6">
+                        <a
+                            href={resume.basics.profiles.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 transition-colors hover:text-[#ece8e1]"
+                        >
+                            <Github size={14} />
+                            Github
+                        </a>
+                        <a
+                            href={resume.basics.profiles.linkedin}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 transition-colors hover:text-[#ece8e1]"
+                        >
+                            <Linkedin size={14} />
+                            LinkedIn
+                        </a>
+                        <a
+                            href={resume.basics.profiles.resume}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 transition-colors hover:text-[#ece8e1]"
+                        >
+                            <Mail size={14} />
+                            Resume
+                        </a>
+                    </div>
+                </footer>
             </main>
 
             {selectedProject && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-                    <div className="bg-charcoal max-w-3xl w-full rounded-2xl border border-white/10 shadow-2xl overflow-hidden relative" onClick={e => e.stopPropagation()}>
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/82 p-4 backdrop-blur-sm">
+                    <div className="relative w-full max-w-5xl overflow-hidden rounded-3xl border border-[#2c2925] bg-[#141414]">
                         <button
+                            type="button"
                             onClick={() => setSelectedProject(null)}
-                            className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-white/10 rounded-full text-white/70 hover:text-white transition-colors z-10"
+                            className="absolute right-5 top-5 z-10 rounded-full border border-[#34302b] bg-[#121111]/80 p-2 text-[#b8b0a6] transition-colors hover:text-[#f2eee8]"
                         >
-                            <X size={20} />
+                            <X size={18} />
                         </button>
 
-                        <div className="h-64 bg-charcoal-light relative">
-                            <img
-                                src="https://images.unsplash.com/photo-1589254065878-42c9da997008?w=800&auto=format&fit=crop&q=60"
-                                alt={selectedProject.title}
-                                className="w-full h-full object-cover"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-charcoal to-transparent" />
-                            <div className="absolute left-6 bottom-6 flex flex-wrap gap-2">
-                                <span className="rounded-full border border-white/10 bg-black/40 px-3 py-1 text-xs font-mono text-white/80">
-                                    {selectedProject.year}
-                                </span>
-                                <span className="rounded-full border border-white/10 bg-black/40 px-3 py-1 text-xs font-mono text-white/80">
-                                    {selectedProject.category}
-                                </span>
+                        <div className="grid lg:grid-cols-[1.05fr_0.95fr]">
+                            <div className="p-6 md:p-8">
+                                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-[#6d675f]">
+                                    {selectedProject.category} · {selectedProject.year}
+                                </p>
+                                <h2 className="mt-4 font-display text-[2.9rem] leading-[0.98] text-[#ece8e1]">
+                                    {selectedProject.title}
+                                </h2>
+                                <p className="mt-4 text-[16px] leading-8 text-[#928a81]">{selectedProject.description}</p>
+
+                                <div className="mt-6 flex flex-wrap gap-2">
+                                    {selectedProject.tech.map((tech) => (
+                                        <span
+                                            key={tech}
+                                            className="rounded-md border border-[#2b2824] px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#7f786f]"
+                                        >
+                                            {tech}
+                                        </span>
+                                    ))}
+                                </div>
+
+                                <div className="mt-8 space-y-3">
+                                    {selectedProject.details.map((detail) => (
+                                        <p key={detail} className="text-[15px] leading-7 text-[#c1baaf]">
+                                            {detail}
+                                        </p>
+                                    ))}
+                                </div>
+
+                                <div className="mt-8 flex flex-wrap gap-3">
+                                    {selectedProject.github && (
+                                        <a
+                                            href={selectedProject.github}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="inline-flex items-center gap-2 rounded-full border border-[#36312c] px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-[#ece8e1]"
+                                        >
+                                            <Github size={14} /> Source
+                                        </a>
+                                    )}
+                                    {selectedProject.live && selectedProject.live !== '#' && (
+                                        <a
+                                            href={selectedProject.live}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="inline-flex items-center gap-2 rounded-full border border-[#36312c] px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-[#ece8e1]"
+                                        >
+                                            <ArrowUpRight size={14} /> Live
+                                        </a>
+                                    )}
+                                </div>
                             </div>
-                        </div>
 
-                        <div className="p-8 -mt-8 relative">
-                            <p className="text-gray-500 text-[11px] uppercase tracking-[0.28em] mb-3">{selectedProject.signal}</p>
-                            <h2 className="text-3xl font-bold text-white mb-3">{selectedProject.title}</h2>
-                            <p className="text-gray-300 leading-relaxed mb-6">
-                                {selectedProject.description}
-                            </p>
-
-                            <div className="flex flex-wrap gap-2 mb-8">
-                                {selectedProject.tech.map((tech: string) => (
-                                    <span key={tech} className="px-3 py-1 bg-white/5 border border-white/5 rounded-full text-xs text-gray-300 font-mono">
-                                        {tech}
-                                    </span>
-                                ))}
-                            </div>
-
-                            <div className="space-y-3 mb-8">
-                                {selectedProject.details.map((detail) => (
-                                    <div key={detail} className="flex items-start gap-3 text-gray-300">
-                                        <span className="mt-1 text-xs text-gray-500">{'>'}</span>
-                                        <span>{detail}</span>
-                                    </div>
-                                ))}
-                            </div>
-
-                            <div className="flex gap-4">
-                                {selectedProject.live && selectedProject.live !== '#' && (
-                                    <a href={selectedProject.live} target="_blank" rel="noopener noreferrer" className="flex-1 py-3 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
-                                        <ExternalLink size={18} /> Live Demo
-                                    </a>
-                                )}
-                                {selectedProject.github && (
-                                    <a href={selectedProject.github} target="_blank" rel="noopener noreferrer" className="flex-1 py-3 border border-white/10 hover:bg-white/5 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2">
-                                        <Github size={18} /> Source Code
-                                    </a>
-                                )}
+                            <div className="min-h-[320px] border-l border-[#22201d] bg-[#101010]">
+                                {selectedProject.image ? (
+                                    <img
+                                        src={selectedProject.image}
+                                        alt={selectedProject.title}
+                                        onError={(event) => {
+                                            event.currentTarget.style.display = 'none';
+                                        }}
+                                        className="h-full w-full object-cover grayscale opacity-70"
+                                    />
+                                ) : null}
                             </div>
                         </div>
                     </div>
@@ -276,25 +390,25 @@ const Home: React.FC = () => {
             )}
 
             {showAllProjects && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-md animate-in fade-in duration-200">
-                    <div className="w-full h-full max-w-6xl mx-auto flex flex-col">
-                        <div className="flex justify-between items-center py-6 border-b border-white/10 mb-8">
-                            <h2 className="text-2xl font-bold text-white">All Projects</h2>
+                <div className="fixed inset-0 z-[90] overflow-y-auto bg-[#0c0c0c]/96 p-4 backdrop-blur-md md:p-8">
+                    <div className="mx-auto max-w-[1480px]">
+                        <div className="mb-8 flex items-center justify-between">
+                            <h2 className="font-display text-[3rem] leading-none text-[#ece8e1]">All Projects</h2>
                             <button
+                                type="button"
                                 onClick={() => setShowAllProjects(false)}
-                                className="p-2 hover:bg-white/10 rounded-full text-gray-400 hover:text-white transition-colors"
+                                className="rounded-full border border-[#34302b] p-2 text-[#b8b0a6] transition-colors hover:text-[#f2eee8]"
                             >
-                                <X size={24} />
+                                <X size={18} />
                             </button>
                         </div>
 
-                        <div className="overflow-y-auto pb-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {projects.map((project) => (
+                        <div className="grid gap-4 lg:grid-cols-2">
+                            {projects.map((project, index) => (
                                 <ProjectCard
                                     key={project.id}
                                     project={project}
-                                    image="https://images.unsplash.com/photo-1589254065878-42c9da997008?w=800&auto=format&fit=crop&q=60"
-                                    color="bg-charcoal"
+                                    wide={index % 3 === 2}
                                     onClick={() => setSelectedProject(project)}
                                 />
                             ))}

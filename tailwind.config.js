@@ -20,8 +20,9 @@ export default {
         'oatmeal': '#e5e5e5',
       },
       fontFamily: {
-        mono: ['"Fira Code"', 'monospace'],
-        sans: ['Helvetica', 'Arial', 'sans-serif'],
+        mono: ['"DM Mono"', 'monospace'],
+        sans: ['"DM Sans"', 'sans-serif'],
+        display: ['"Instrument Serif"', 'serif'],
       },
       animation: {
         'blink': 'blink 1s step-end infinite',

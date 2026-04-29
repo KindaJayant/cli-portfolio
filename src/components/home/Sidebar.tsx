@@ -1,5 +1,6 @@
 import React from 'react';
 import { Github, Linkedin, Mail, X } from 'lucide-react';
+import { resume } from '../../data/resume';
 
 interface SidebarProps {
     mobileOpen: boolean;
@@ -20,20 +21,20 @@ const Sidebar: React.FC<SidebarProps> = ({ mobileOpen, onClose }) => {
                 />
             )}
 
-            <aside className={`fixed left-0 top-0 z-[110] h-screen w-72 md:w-72 lg:w-80 bg-charcoal-dark border-r border-white/5 p-8 flex flex-col transition-transform duration-300 md:translate-x-0 ${mobileOpen ? 'translate-x-0' : '-translate-x-full'} md:w-72 lg:w-80 md:z-50`}>
+            <aside
+                className={`fixed left-0 top-0 z-[110] flex h-screen w-64 flex-col border-r border-white/5 bg-charcoal-dark p-7 transition-transform duration-300 md:translate-x-0 lg:w-72 ${
+                    mobileOpen ? 'translate-x-0' : '-translate-x-full'
+                }`}
+            >
                 <div className="flex items-start justify-between md:block">
-                    <div className="flex flex-col gap-4 mb-12">
-                        <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-white/10 shadow-xl">
-                            <img
-                                src="https://ui-avatars.com/api/?name=Jayant+Singh&background=1e1e1e&color=fff&size=256"
-                                alt="Jayant Singh Bisht"
-                                className="w-full h-full object-cover opacity-90"
-                            />
+                    <div className="mb-12 flex flex-col gap-4">
+                        <div className="flex h-20 w-20 items-center justify-center rounded-full border border-white/10 bg-charcoal-light text-3xl font-semibold tracking-tight text-white shadow-xl">
+                            JS
                         </div>
                         <div>
-                            <h1 className="text-2xl font-bold text-soft-white tracking-tight">Jayant Singh</h1>
-                            <p className="text-gray-400 text-sm mt-1">Full-Stack & AI Engineer</p>
-                            <p className="text-gray-600 text-xs mt-4 uppercase tracking-widest font-semibold">Chandigarh, India</p>
+                            <h1 className="text-2xl font-bold tracking-tight text-soft-white">{resume.basics.name}</h1>
+                            <p className="mt-1 text-sm text-gray-400">Full-Stack & AI Engineer</p>
+                            <p className="mt-4 text-xs font-semibold uppercase tracking-widest text-gray-600">Chandigarh, India</p>
                         </div>
                     </div>
 
@@ -41,7 +42,7 @@ const Sidebar: React.FC<SidebarProps> = ({ mobileOpen, onClose }) => {
                         type="button"
                         aria-label="Close menu"
                         onClick={onClose}
-                        className="md:hidden rounded-full border border-white/10 p-2 text-gray-400 transition-colors hover:bg-white/5 hover:text-white"
+                        className="rounded-full border border-white/10 p-2 text-gray-400 transition-colors hover:bg-white/5 hover:text-white md:hidden"
                     >
                         <X size={18} />
                     </button>
@@ -54,9 +55,13 @@ const Sidebar: React.FC<SidebarProps> = ({ mobileOpen, onClose }) => {
                                 <a
                                     href={`#${item.toLowerCase().replace(' ', '-')}`}
                                     onClick={onClose}
-                                    className="flex items-center gap-3 text-gray-400 hover:text-white transition-colors py-2 group cursor-pointer"
+                                    className="group flex items-center gap-3 py-2 text-gray-400 transition-colors hover:text-white"
                                 >
-                                    <span className={`w-1.5 h-1.5 rounded-full ${item === 'Home' ? 'bg-white' : 'bg-transparent group-hover:bg-white/50'} transition-all`} />
+                                    <span
+                                        className={`h-1.5 w-1.5 rounded-full transition-all ${
+                                            item === 'Home' ? 'bg-white' : 'bg-transparent group-hover:bg-white/50'
+                                        }`}
+                                    />
                                     <span className="text-sm font-medium">{item}</span>
                                 </a>
                             </li>
@@ -64,21 +69,19 @@ const Sidebar: React.FC<SidebarProps> = ({ mobileOpen, onClose }) => {
                     </ul>
                 </nav>
 
-                <div className="mt-auto pt-8 border-t border-white/5">
-                    <div className="flex gap-6 items-center">
-                        <a href="https://github.com/KindaJayant" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-white transition-colors">
+                <div className="mt-auto border-t border-white/5 pt-8">
+                    <div className="flex items-center gap-6">
+                        <a href="https://github.com/KindaJayant" target="_blank" rel="noopener noreferrer" className="text-gray-500 transition-colors hover:text-white">
                             <Github size={20} />
                         </a>
-                        <a href="https://www.linkedin.com/in/kindajayant/" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-white transition-colors">
+                        <a href="https://www.linkedin.com/in/kindajayant/" target="_blank" rel="noopener noreferrer" className="text-gray-500 transition-colors hover:text-white">
                             <Linkedin size={20} />
                         </a>
-                        <a href="mailto:iamjayant246@gmail.com" className="text-gray-500 hover:text-white transition-colors">
+                        <a href="mailto:iamjayant246@gmail.com" className="text-gray-500 transition-colors hover:text-white">
                             <Mail size={20} />
                         </a>
                     </div>
-                    <div className="mt-8 text-[10px] text-gray-700 font-mono">
-                        30.7333Â° N, 76.7794Â° E
-                    </div>
+                    <div className="mt-8 text-[10px] font-mono text-gray-700">30.7333 N | 76.7794 E</div>
                 </div>
             </aside>
         </>
