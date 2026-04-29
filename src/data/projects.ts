@@ -30,7 +30,7 @@ export const projects: Project[] = [
             'Designed the output as a structured six-section report with bull and bear framing for fast investor-style review.',
         ],
         github: 'https://github.com/KindaJayant/analyst-project',
-        live: '#',
+        live: 'https://analyst-project-ten.vercel.app',
     },
     {
         id: 2,

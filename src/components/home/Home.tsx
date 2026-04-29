@@ -24,11 +24,6 @@ import { resume } from '../../data/resume';
 
 const heroSignals = ['Agent systems', 'LLMOps', 'Full-stack', 'Eval workflows'];
 
-const headlineMetrics = [
-    { value: '5', label: 'Projects' },
-    { value: '4k+', label: 'Users' },
-];
-
 const stackItems = [
     { label: 'Python', icon: BrainCircuit },
     { label: 'FastAPI', icon: ServerCog },
@@ -172,25 +167,16 @@ const Home: React.FC = () => {
                     </div>
 
                     <div className="rounded-2xl border border-[#242424] bg-[#141414] p-5 md:p-8">
-                        <div className="flex h-full flex-col">
-                            <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-full border border-[#302c27] bg-[radial-gradient(circle_at_30%_30%,#2b2824_0%,#171615_58%,#121111_100%)] font-display text-5xl text-[#ece8e1]">
+                        <div className="flex flex-col items-center justify-center gap-5 py-6 md:py-8">
+                            <div className="flex h-40 w-40 items-center justify-center rounded-full border border-[#302c27] bg-[radial-gradient(circle_at_30%_30%,#2b2824_0%,#171615_58%,#121111_100%)] font-display text-7xl text-[#ece8e1] md:h-44 md:w-44 md:text-[5.25rem]">
                                 JS
                             </div>
 
-                            <div className="mt-5 text-center">
+                            <div className="text-center">
                                 <h2 className="font-display text-[2rem] leading-none text-[#ece8e1]">{resume.basics.name}</h2>
                                 <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.18em] text-[#726d65]">
                                     BE CSE · Thapar · Jun 2026
                                 </p>
-                            </div>
-
-                            <div className="mt-8 grid grid-cols-2 gap-4 border-t border-[#242424] pt-6">
-                                {headlineMetrics.map((metric) => (
-                                    <div key={metric.label} className="text-center">
-                                        <div className="font-display text-[2.25rem] leading-none text-[#f0ebe4]">{metric.value}</div>
-                                        <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.22em] text-[#5f5a54]">{metric.label}</div>
-                                    </div>
-                                ))}
                             </div>
                         </div>
                     </div>
