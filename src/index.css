@@ -37,6 +37,11 @@
     color: var(--color-text);
     @apply font-sans overflow-y-auto transition-colors duration-300;
   }
+
+  ::selection {
+    background: rgba(236, 232, 225, 0.18);
+    color: #ece8e1;
+  }
 }
 
 @layer utilities {

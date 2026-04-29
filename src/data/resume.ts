@@ -7,7 +7,7 @@ export const resume = {
         profiles: {
             linkedin: "https://www.linkedin.com/in/kindajayant/",
             github: "https://github.com/KindaJayant",
-            resume: "https://drive.google.com/file/d/1cBzpEZNheEpo-WsACZJnNdjDlH9qEgTA/view"
+            resume: "https://drive.google.com/file/d/1A8P-k6DWCx7dbodOMVal8QlqzRqsmNIX/view?usp=sharing"
         }
     },
     education: [

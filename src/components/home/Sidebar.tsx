@@ -1,5 +1,6 @@
 import React from 'react';
 import { Github, Linkedin, Mail, X } from 'lucide-react';
+import { resume } from '../../data/resume';
 
 interface SidebarProps {
     mobileOpen: boolean;
@@ -31,7 +32,7 @@ const Sidebar: React.FC<SidebarProps> = ({ mobileOpen, onClose }) => {
                             JS
                         </div>
                         <div>
-                            <h1 className="text-2xl font-bold tracking-tight text-soft-white">Jayant Singh</h1>
+                            <h1 className="text-2xl font-bold tracking-tight text-soft-white">{resume.basics.name}</h1>
                             <p className="mt-1 text-sm text-gray-400">Full-Stack & AI Engineer</p>
                             <p className="mt-4 text-xs font-semibold uppercase tracking-widest text-gray-600">Chandigarh, India</p>
                         </div>
