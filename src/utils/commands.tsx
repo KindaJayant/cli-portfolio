@@ -15,8 +15,9 @@ export type TerminalActions = {
     setMatrixBoost: (active: boolean) => void;
     setGlitchMode: (active: boolean) => void;
     triggerThemeTroll: () => void;
-    setTheme: (theme: 'dark' | 'light' | 'cyberpunk') => void;
+    setTheme: (theme: 'dark' | 'light' | 'cyberpunk' | 'serika' | 'nord' | 'matcha') => void;
     setIsAiMode: (active: boolean) => void;
+    runCommand: (command: string) => void;
 };
 
 export interface Command {
@@ -26,75 +27,85 @@ export interface Command {
     execute: (args: string[], actions: TerminalActions) => CommandOutput;
 }
 
+const visibleProjects = projectsData.filter((project) => project.slug !== 'llm-evaluations');
+
 const findProject = (query: string) => {
     const normalized = query.toLowerCase();
-    return projectsData.find((project) =>
+    return visibleProjects.find((project) =>
         project.id.toString() === normalized ||
         project.slug.toLowerCase() === normalized ||
         project.title.toLowerCase().includes(normalized)
     );
 };
 
-const impactMetrics = [
-    { label: 'Voice-to-text accuracy', value: '90%' },
-    { label: 'Users reached', value: '4,000+' },
-    { label: 'Equities scored', value: '5,000+' },
-    { label: 'Concurrent workflows', value: '10+' },
+const aboutStats = [
+    { label: 'Current focus', value: 'Reliable multi-agent orchestration' },
+    { label: 'Base', value: resume.basics.location },
+    { label: 'Availability', value: 'Open to full-time roles' },
 ];
 
 const stackGroups = [
     {
-        title: 'Full-Stack Apps',
-        level: 5,
-        tools: ['React', 'Next.js', 'TypeScript', 'APIs'],
+        title: 'Core stack',
+        tools: ['Python', 'TypeScript', 'React', 'Next.js', 'FastAPI', 'PostgreSQL'],
     },
     {
-        title: 'AI Systems',
-        level: 5,
-        tools: ['RAG pipelines', 'Vapi', 'Prompt design', 'LLM orchestration'],
+        title: 'AI systems',
+        tools: ['Gemini', 'LangGraph', 'Prompt orchestration', 'Eval workflows'],
     },
     {
-        title: 'Backend',
-        level: 4,
-        tools: ['Node.js', 'Supabase', 'Firebase', 'APIs'],
+        title: 'Infra and workflows',
+        tools: ['Redis', 'MongoDB', 'Firebase', 'AWS', 'n8n'],
     },
     {
-        title: 'Automation',
-        level: 4,
-        tools: ['n8n', 'Async jobs', 'Workflow design'],
+        title: 'Technical arsenal',
+        tools: ['Python', 'TypeScript', 'React', 'Next.js', 'FastAPI', 'PostgreSQL', 'Redis', 'MongoDB', 'Firebase', 'AWS', 'n8n', 'Gemini'],
     },
 ];
 
-const renderBars = (level: number) => `${'█'.repeat(level)}${'░'.repeat(5 - level)}`;
+const experienceEntries = [
+    {
+        role: 'AI Engineer Intern',
+        company: 'The Future University',
+        location: 'Chandigarh, IN',
+        dates: '[Jan 2026 - Present]',
+        bullets: [
+            'Built and tested AI-first investing workflows across stock scoring, prompt logic, portfolio analysis, and automation loops.',
+            'Developed and deployed an institutional-grade stock scoring system evaluating 5000+ Indian equities with multi-pillar analysis and narrative risk signals.',
+            'Supported a 6000+ user investing product while building and testing 5+ core trading workflows.',
+        ],
+    },
+    {
+        role: 'Web Developer Intern',
+        company: 'NVISH Solutions',
+        location: 'Chandigarh, IN',
+        dates: '[Jun 2024 - Jul 2024]',
+        bullets: [
+            'Analyzed retrieval bottlenecks and implemented a MongoDB-backed solution that reduced retrieval times by 75%.',
+            'Improved client-facing component patterns and helped reduce bounce rates by 15% through better interaction design.',
+        ],
+    },
+];
+
+const linkClass = 'underline decoration-dashed underline-offset-4 hover:text-theme-text';
 
 const renderProjectSection = (project: Project) => (
-    <div className="flex flex-col gap-4 max-w-3xl">
+    <div className="flex max-w-3xl flex-col gap-4">
         <div>
-            <div className="text-xs uppercase tracking-widest text-theme-dim">Case Study</div>
+            <div className="text-xs uppercase tracking-widest text-theme-dim">Project</div>
             <div className="text-2xl font-bold text-theme-text">{project.title}</div>
-            <div className="text-theme-dim mt-1">Slug: {project.slug}</div>
+            <div className="mt-1 text-theme-dim">Slug: {project.slug}</div>
         </div>
 
-        <div className="grid gap-3 md:grid-cols-[160px_1fr] text-sm">
-            <div className="text-theme-accent font-bold">Problem</div>
+        <div className="grid gap-3 text-sm md:grid-cols-[160px_1fr]">
+            <div className="font-bold text-theme-accent">What it is</div>
             <div className="text-theme-dim">{project.description}</div>
 
-            <div className="text-theme-accent font-bold">Stack</div>
+            <div className="font-bold text-theme-accent">Stack</div>
             <div className="text-theme-dim">{project.tech.join(' | ')}</div>
 
-            <div className="text-theme-accent font-bold">Signals</div>
-            <div className="text-theme-dim">
-                {project.slug === 'analyst-project' && 'Autonomous research loop, live financial data ingestion, search resilience, and structured 6-section outputs.'}
-                {project.slug === 'codebase-onboarding-agent' && 'LangGraph DAG orchestration, Tree-sitter parsing, vector search, and streamed codebase analysis.'}
-                {project.slug === 'promptops-tool' && 'Prompt versioning, rollback, side-by-side diffs, test execution, and developer-facing workflow tooling.'}
-                {project.slug === 'ai-interview' && 'Voice AI interview sessions, transcript-driven feedback, authenticated dashboards, and reusable full-stack architecture.'}
-                {project.slug === 'llm-evaluations' && 'Batch benchmark runs, comparison views, scoring heuristics, and evaluation-driven model iteration.'}
-            </div>
-
-            <div className="text-theme-accent font-bold">Next Step</div>
-            <div className="text-theme-dim">
-                {project.github ? 'Open the source link below or ask Jayant AI why this project matters for your use case.' : 'Ask Jayant AI to compare this project with another build.'}
-            </div>
+            <div className="font-bold text-theme-accent">Highlights</div>
+            <div className="text-theme-dim">{project.details.join(' ')}</div>
         </div>
 
         <div className="flex gap-4 text-sm">
@@ -103,7 +114,7 @@ const renderProjectSection = (project: Project) => (
                     href={project.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-white hover:text-theme-text underline decoration-dashed"
+                    className="text-white underline decoration-dashed hover:text-theme-text"
                 >
                     [GitHub]
                 </a>
@@ -113,12 +124,12 @@ const renderProjectSection = (project: Project) => (
                     href={project.live}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-white hover:text-theme-text underline decoration-dashed"
+                    className="text-white underline decoration-dashed hover:text-theme-text"
                 >
-                    [Live Demo]
+                    [Live]
                 </a>
             ) : (
-                <span className="text-theme-dim italic">Live deployment not linked yet.</span>
+                <span className="italic text-theme-dim">Live deployment not linked yet.</span>
             )}
         </div>
     </div>
@@ -133,85 +144,63 @@ export const commands: Record<string, Command> = {
     },
     help: {
         name: 'help',
-        description: 'List all available commands',
-        execute: () => {
+        description: 'List available commands',
+        execute: (_, actions) => {
+            const primaryCommands = Object.values(commands).filter((cmd) => !cmd.hidden);
+
             return (
                 <div className="flex flex-col gap-4">
-                    <div className="text-theme-text font-bold">Available commands</div>
-                    <div className="grid grid-cols-[140px_1fr] gap-2">
-                        {Object.values(commands)
-                            .filter(cmd => !cmd.hidden)
-                            .map((cmd) => (
-                                <div key={cmd.name} className="flex contents">
-                                    <span className="text-theme-text font-bold">{cmd.name}</span>
-                                    <span className="text-theme-dim">- {cmd.description}</span>
-                                </div>
-                            ))}
-                    </div>
-                    <div className="text-theme-dim text-sm">
-                        Suggested journey: <span className="text-theme-text">neofetch</span> {'->'} <span className="text-theme-text">impact</span> {'->'} <span className="text-theme-text">timeline</span> {'->'} <span className="text-theme-text">case-study analyst-project</span> {'->'} <span className="text-theme-text">chat jayant</span>
-                    </div>
-                </div>
-            );
-        },
-    },
-    neofetch: {
-        name: 'neofetch',
-        description: 'Show a workstation-style profile summary',
-        execute: () => {
-            return (
-                <div className="grid gap-6 md:grid-cols-[auto_1fr] items-start">
-                    <pre className="text-theme-text text-xs leading-tight">{String.raw`
-      _____                       __
-     / ___/____  ____ ___________/ /_
-     \__ \/ __ \/ __ \`/ ___/ ___/ __/
-    ___/ / /_/ / /_/ / /  / /__/ /_
-   /____/ .___/\__,_/_/   \___/\__/
-       /_/`}</pre>
-                    <div className="grid gap-2 text-sm">
-                        <div><span className="text-theme-accent">name</span>: {resume.basics.name}</div>
-                        <div><span className="text-theme-accent">role</span>: Full-Stack + AI Engineer</div>
-                        <div><span className="text-theme-accent">location</span>: {resume.basics.location}</div>
-                        <div><span className="text-theme-accent">focus</span>: performant interfaces, AI products, workflow systems</div>
-                        <div><span className="text-theme-accent">status</span>: open to opportunities</div>
-                        <div><span className="text-theme-accent">highlights</span>: {impactMetrics.map((item) => `${item.value} ${item.label}`).join(' | ')}</div>
-                        <div><span className="text-theme-accent">next</span>: try `impact`, `timeline`, `stack`, or `case-study analyst-project`</div>
-                    </div>
-                </div>
-            );
-        },
-    },
-    menu: {
-        name: 'menu',
-        description: 'Alias for help',
-        hidden: true,
-        execute: (args, actions) => commands.help.execute(args, actions),
-    },
-    // ... existing commands ...
-    whoami: {
-        name: 'whoami',
-        description: 'Display user profile',
-        execute: () => {
-            return (
-                <div className="flex flex-col gap-2">
-                    <div className="text-xl font-bold text-theme-accent mb-2">Hello, I'm {resume.basics.name}</div>
-                    <div>{resume.basics.location} | {resume.basics.email} | {resume.basics.phone}</div>
-                    <div className="flex gap-4 mt-2">
-                        {Object.entries(resume.basics.profiles).map(([platform, url]) => (
-                            <a
-                                key={platform}
-                                href={url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-blue-400 hover:text-blue-300 hover:underline"
-                            >
-                                [{platform}]
-                            </a>
+                    <div className="font-bold text-theme-text">Available commands</div>
+                    <div className="grid grid-cols-[120px_1fr] gap-2">
+                        {primaryCommands.map((cmd) => (
+                            <div key={cmd.name} className="contents">
+                                <span className="font-bold text-theme-text">{cmd.name}</span>
+                                <span className="text-theme-dim">- {cmd.description}</span>
+                            </div>
                         ))}
                     </div>
-                    <div className="text-theme-dim mt-4 max-w-2xl">
-                        A Developer Dedicated to Crafting Scalable Web Solutions.
-                        I specialize in building AI-powered platforms and immersive web experiences.
+                    <div className="text-sm text-theme-dim">
+                        Good starting points:{' '}
+                        <button type="button" onClick={() => actions.runCommand('about')} className={linkClass}>
+                            about
+                        </button>
+                        ,{' '}
+                        <button type="button" onClick={() => actions.runCommand('projects')} className={linkClass}>
+                            projects
+                        </button>
+                        ,{' '}
+                        <button type="button" onClick={() => actions.runCommand('experience')} className={linkClass}>
+                            experience
+                        </button>
+                        ,{' '}
+                        <button type="button" onClick={() => actions.runCommand('skills')} className={linkClass}>
+                            skills
+                        </button>
+                    </div>
+                </div>
+            );
+        },
+    },
+    about: {
+        name: 'about',
+        description: 'Show a concise profile summary',
+        execute: () => {
+            return (
+                <div className="flex max-w-3xl flex-col gap-5">
+                    <div>
+                        <div className="text-2xl font-bold text-theme-text">Jayant Singh Bisht</div>
+                        <div className="mt-2 text-theme-dim">
+                            I build reliable agent workflows, LLMOps tooling, and production AI systems.
+                        </div>
+                    </div>
+
+                    <div className="grid gap-3 md:grid-cols-3">
+                        {aboutStats.map((item) => (
+                            <div key={item.label} className="rounded-sm border border-theme-text/20 bg-theme-text/5 px-4 py-3">
+                                <div className="text-xs uppercase tracking-widest text-theme-dim">{item.label}</div>
+                                <div className="mt-2 font-semibold text-theme-text">{item.value}</div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             );
@@ -223,17 +212,17 @@ export const commands: Record<string, Command> = {
         execute: () => {
             return (
                 <div className="flex flex-col gap-6">
-                    <div className="text-lg font-bold border-b border-theme-text/30 pb-2 mb-2 w-max">Professional Experience</div>
-                    {resume.internships.map((job, index) => (
-                        <div key={index} className="flex flex-col gap-1">
-                            <div className="flex justify-between items-baseline flex-wrap">
-                                <span className="text-theme-text font-bold text-lg">{job.position}</span>
-                                <span className="text-theme-dim text-sm">[{job.startDate} - {job.endDate}]</span>
+                    <div className="mb-2 w-max border-b border-theme-text/30 pb-2 text-lg font-bold">Professional Experience</div>
+                    {experienceEntries.map((job) => (
+                        <div key={`${job.company}-${job.role}`} className="flex flex-col gap-1">
+                            <div className="flex flex-wrap items-baseline justify-between gap-2">
+                                <span className="text-lg font-bold text-theme-text">{job.role}</span>
+                                <span className="text-sm text-theme-dim">{job.dates}</span>
                             </div>
-                            <div className="text-theme-accent italic">{job.company}, {job.location}</div>
-                            <ul className="list-disc list-inside text-theme-dim mt-2 space-y-1">
-                                {job.highlights.map((highlight, i) => (
-                                    <li key={i} className="text-sm leading-relaxed">{highlight}</li>
+                            <div className="italic text-theme-accent">{job.company}, {job.location}</div>
+                            <ul className="mt-2 list-inside list-disc space-y-1 text-theme-dim">
+                                {job.bullets.map((highlight, index) => (
+                                    <li key={index} className="text-sm leading-relaxed">{highlight}</li>
                                 ))}
                             </ul>
                         </div>
@@ -242,161 +231,52 @@ export const commands: Record<string, Command> = {
             );
         },
     },
-    education: {
-        name: 'education',
-        description: 'View educational background',
-        execute: () => {
-            return (
-                <div className="flex flex-col gap-4">
-                    <div className="text-lg font-bold border-b border-theme-text/30 pb-2 mb-2 w-max">Education</div>
-                    {resume.education.map((edu, index) => (
-                        <div key={index} className="flex flex-col">
-                            <div className="flex justify-between items-baseline">
-                                <span className="text-theme-text font-bold">{edu.institution}</span>
-                                <span className="text-theme-dim text-sm">[{edu.startDate} - {edu.endDate}]</span>
-                            </div>
-                            <div className="text-theme-accent">{edu.studyType} in {edu.area}</div>
-                            <div className="text-theme-dim text-sm mt-1">Coursework: {edu.courses.join(', ')}</div>
-                        </div>
-                    ))}
-                </div>
-            );
-        },
-    },
     projects: {
         name: 'projects',
-        description: 'List technical projects',
-        execute: () => {
-            return (
-                <div className="flex flex-col gap-2">
-                    <div className="text-lg font-bold border-b border-theme-text/30 pb-2 mb-2 w-max">Projects</div>
-                    {projectsData.map((project) => (
-                        <div key={project.id} className="text-theme-accent">
-                            <span className="text-theme-text">[{project.id}]</span> {project.title}
-                        </div>
-                    ))}
-                    <div className="text-theme-dim mt-2 text-sm">Type `open &lt;number&gt;`, `project &lt;slug&gt;`, or `case-study &lt;name&gt;` to drill in.</div>
-                </div>
-            );
-        },
-    },
-    impact: {
-        name: 'impact',
-        description: 'Show headline metrics and proof points',
-        execute: () => {
-            return (
-                <div className="flex flex-col gap-4">
-                    <div className="text-lg font-bold border-b border-theme-text/30 pb-2 w-max">Impact Snapshot</div>
-                    <div className="grid gap-3 md:grid-cols-2">
-                        {impactMetrics.map((metric) => (
-                            <div key={metric.label} className="border border-theme-text/20 bg-theme-text/5 rounded-sm px-4 py-3">
-                                <div className="text-2xl font-bold text-theme-text">{metric.value}</div>
-                                <div className="text-sm text-theme-dim">{metric.label}</div>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="text-theme-dim text-sm">
-                        Proof lives across `analyst-project`, `codebase-onboarding-agent`, `promptops-tool`, `ai-interview`, and `llm-evaluations`.
-                    </div>
-                </div>
-            );
-        },
-    },
-    timeline: {
-        name: 'timeline',
-        description: 'Render a quick career and project timeline',
-        execute: () => {
-            const entries = [
-                '2022  | Started BE in Computer Science and Business Systems at Thapar',
-                '2024  | Web Developer Intern at NVISH Solutions',
-                '2024  | Built Prepwise AI Interview and PromptOps Tool',
-                '2025  | Built LLM Evaluation System and Codebase Onboarding Agent',
-                '2026  | Shipped ResearchAgent for autonomous market and company research',
-            ];
-
+        description: 'Browse flagship projects',
+        execute: (_, actions) => {
             return (
                 <div className="flex flex-col gap-3">
-                    <div className="text-lg font-bold border-b border-theme-text/30 pb-2 w-max">Timeline</div>
-                    <div className="font-mono text-sm whitespace-pre-wrap text-theme-dim">
-                        {entries.map((entry, index) => `${index === entries.length - 1 ? '└' : '├'}─ ${entry}`).join('\n')}
-                    </div>
+                    <div className="mb-2 w-max border-b border-theme-text/30 pb-2 text-lg font-bold">Projects</div>
+                    {visibleProjects.map((project) => (
+                        <button
+                            key={project.id}
+                            type="button"
+                            onClick={() => actions.runCommand(`project ${project.slug}`)}
+                            className="grid gap-1 text-left transition-colors hover:text-theme-text md:grid-cols-[220px_1fr]"
+                        >
+                            <div className="font-semibold text-theme-text underline decoration-dashed underline-offset-4">{project.slug}</div>
+                            <div className="text-sm text-theme-dim">{project.title} - {project.description}</div>
+                        </button>
+                    ))}
+                    <div className="mt-2 text-sm text-theme-dim">Click a project slug to open it.</div>
                 </div>
             );
-        },
-    },
-    chat: {
-        name: 'chat',
-        description: 'Talk to Jayant AI (usage: chat jayant)',
-        execute: (args, actions) => {
-            if (args[0] === 'jayant') {
-                actions.setIsAiMode(true);
-                return { type: 'ai', content: "Hello! I am Jayant's AI assistant. Ask me anything about his work." };
-            }
-            return 'Usage: chat jayant';
-        },
-    },
-    open: {
-        name: 'open',
-        description: 'View project details',
-        execute: (args) => {
-            if (args.length === 0) return 'Usage: open <id | slug>';
-
-            const project = findProject(args.join(' '));
-
-            if (!project) return `Project not found: ${args[0]}`;
-
-            return { type: 'project', project };
         },
     },
     project: {
         name: 'project',
-        description: 'Open a deeper project case study',
+        description: 'Open one project in detail',
         execute: (args) => {
-            if (args.length === 0) return 'Usage: project <id | slug | title>';
+            if (args.length === 0) return 'Usage: project <slug>';
 
             const project = findProject(args.join(' '));
-
             if (!project) return `Project not found: ${args.join(' ')}`;
 
             return { type: 'component', content: renderProjectSection(project) };
         },
     },
-    'case-study': {
-        name: 'case-study',
-        description: 'Alias for project deep dives',
-        execute: (args, actions) => commands.project.execute(args, actions),
-    },
     skills: {
         name: 'skills',
-        description: 'Display technical skills',
+        description: 'Show technical stack',
         execute: () => {
             return (
                 <div className="flex flex-col gap-4">
-                    <div className="text-lg font-bold border-b border-theme-text/30 pb-2 mb-2 w-max">Technical Skills</div>
-                    <div>
-                        <span className="text-theme-text font-bold">Tools & Platforms: </span>
-                        <span className="text-theme-dim">{resume.skills.toolsAndPlatforms.join(', ')}</span>
-                    </div>
-                    <div>
-                        <span className="text-theme-text font-bold">Professional Skills: </span>
-                        <span className="text-theme-dim">{resume.skills.other.join(', ')}</span>
-                    </div>
-                </div>
-            );
-        },
-    },
-    stack: {
-        name: 'stack',
-        description: 'Visualize core strengths with signal bars',
-        execute: () => {
-            return (
-                <div className="flex flex-col gap-4">
-                    <div className="text-lg font-bold border-b border-theme-text/30 pb-2 w-max">Stack Signal</div>
+                    <div className="mb-2 w-max border-b border-theme-text/30 pb-2 text-lg font-bold">Technical Stack</div>
                     {stackGroups.map((group) => (
-                        <div key={group.title} className="grid gap-1 md:grid-cols-[140px_120px_1fr] text-sm items-start">
-                            <div className="text-theme-text font-bold">{group.title}</div>
-                            <div className="font-mono text-theme-accent">{renderBars(group.level)}</div>
-                            <div className="text-theme-dim">{group.tools.join(' | ')}</div>
+                        <div key={group.title}>
+                            <div className="font-bold text-theme-text">{group.title}</div>
+                            <div className="mt-1 text-theme-dim">{group.tools.join(' | ')}</div>
                         </div>
                     ))}
                 </div>
@@ -405,14 +285,35 @@ export const commands: Record<string, Command> = {
     },
     contact: {
         name: 'contact',
-        description: 'Get contact information',
+        description: 'Get contact links',
         execute: () => {
             return (
                 <div className="flex flex-col gap-2">
-                    <div className="text-lg font-bold border-b border-theme-text/30 pb-2 mb-2 w-max">Contact Protocol</div>
-                    <div><span className="text-theme-text">Email:</span> {resume.basics.email}</div>
-                    <div><span className="text-theme-text">Phone:</span> {resume.basics.phone}</div>
-                    <div><span className="text-theme-text">Location:</span> {resume.basics.location}</div>
+                    <div className="mb-2 w-max border-b border-theme-text/30 pb-2 text-lg font-bold">Contact</div>
+                    <div>
+                        <span className="text-theme-text">Email:</span>{' '}
+                        <a className={linkClass} href={`mailto:${resume.basics.email}`}>
+                            {resume.basics.email}
+                        </a>
+                    </div>
+                    <div>
+                        <span className="text-theme-text">LinkedIn:</span>{' '}
+                        <a className={linkClass} href={resume.basics.profiles.linkedin} target="_blank" rel="noopener noreferrer">
+                            {resume.basics.profiles.linkedin}
+                        </a>
+                    </div>
+                    <div>
+                        <span className="text-theme-text">GitHub:</span>{' '}
+                        <a className={linkClass} href={resume.basics.profiles.github} target="_blank" rel="noopener noreferrer">
+                            {resume.basics.profiles.github}
+                        </a>
+                    </div>
+                    <div>
+                        <span className="text-theme-text">Resume:</span>{' '}
+                        <a className={linkClass} href={resume.basics.profiles.resume} target="_blank" rel="noopener noreferrer">
+                            {resume.basics.profiles.resume}
+                        </a>
+                    </div>
                 </div>
             );
         },
@@ -422,79 +323,53 @@ export const commands: Record<string, Command> = {
         description: 'Clear the terminal screen',
         execute: () => 'CLEAR_SIGNAL',
     },
-    sudo: {
-        name: 'sudo',
-        description: 'Admin privileges',
-        hidden: true,
-        execute: (args) => {
-            if (args.join(' ') === 'hire jayant') {
-                return (
-                    <div className="text-theme-text">
-                        <div>Access granted.</div>
-                        <div className="text-xl font-bold mt-2">Welcome aboard! 🚀</div>
-                        <div>Contacting candidate...</div>
-                    </div>
-                );
-            }
-            return 'Permission denied: User is not in the sudoers file. This incident will be reported.';
-        },
-    },
-    // matrix command moved to compatible standalone section below
-    coffee: {
-        name: 'coffee',
-        description: 'Brew some coffee',
-        hidden: true,
-        execute: () => {
-            const jokes = [
-                "I drink coffee for your protection.",
-                "Sudo make me a sandwich.",
-                "Error 418: I'm a teapot.",
-                "Software developers are devices that turn coffee into code.",
-            ];
-            return jokes[Math.floor(Math.random() * jokes.length)];
-        },
-    },
-    konami: {
-        name: 'konami',
-        description: 'Cheat code',
-        hidden: true,
-        execute: (_, actions) => {
-            actions.setGlitchMode(true);
-            setTimeout(() => actions.setGlitchMode(false), 3000);
-            return 'GOD MODE ENABLED (visuals only, sorry)';
-        },
-    },
     theme: {
         name: 'theme',
-        description: 'Change terminal theme (dark | light | cyberpunk)',
+        description: 'Change terminal theme (dark | light | cyberpunk | serika | nord | matcha)',
         execute: (args, actions) => {
             const theme = args[0]?.toLowerCase();
             if (theme === 'light') {
                 actions.triggerThemeTroll();
                 return 'Initiating light mode sequence...';
-            } else if (theme === 'dark') {
+            }
+            if (theme === 'dark') {
                 actions.setTheme('dark');
                 actions.setMatrixBoost(false);
                 return 'Restoring dark mode...';
-            } else if (theme === 'cyberpunk') {
+            }
+            if (theme === 'cyberpunk') {
                 actions.setTheme('cyberpunk');
                 actions.setMatrixBoost(false);
-                return 'Initializing NEON CITY interface...';
-            } else if (theme === 'matrix') {
-                // Secret path still works but not advertised
+                return 'Initializing cyberpunk mode...';
+            }
+            if (theme === 'serika') {
+                actions.setTheme('serika');
+                actions.setMatrixBoost(false);
+                return 'Loading Serika theme...';
+            }
+            if (theme === 'nord') {
+                actions.setTheme('nord');
+                actions.setMatrixBoost(false);
+                return 'Loading Nord theme...';
+            }
+            if (theme === 'matcha') {
+                actions.setTheme('matcha');
+                actions.setMatrixBoost(false);
+                return 'Loading Matcha theme...';
+            }
+            if (theme === 'matrix') {
                 actions.setTheme('dark');
                 actions.setMatrixBoost(true);
                 return 'Entering the Matrix...';
             }
-            return 'Usage: theme <dark | light | cyberpunk>';
+            return 'Usage: theme <dark | light | cyberpunk | serika | nord | matcha>';
         },
     },
-    // Standalone commands for better UX
     light: {
         name: 'light',
         description: 'Switch to light mode',
         execute: (_, actions) => {
-            actions.triggerThemeTroll(); // Still troll them!
+            actions.triggerThemeTroll();
             return 'Initiating light mode sequence...';
         },
     },
@@ -513,7 +388,156 @@ export const commands: Record<string, Command> = {
         execute: (_, actions) => {
             actions.setTheme('cyberpunk');
             actions.setMatrixBoost(false);
-            return 'Initializing NEON CITY interface...';
+            return 'Initializing cyberpunk mode...';
+        },
+    },
+    serika: {
+        name: 'serika',
+        description: 'Switch to Serika theme',
+        execute: (_, actions) => {
+            actions.setTheme('serika');
+            actions.setMatrixBoost(false);
+            return 'Loading Serika theme...';
+        },
+    },
+    nord: {
+        name: 'nord',
+        description: 'Switch to Nord theme',
+        execute: (_, actions) => {
+            actions.setTheme('nord');
+            actions.setMatrixBoost(false);
+            return 'Loading Nord theme...';
+        },
+    },
+    matcha: {
+        name: 'matcha',
+        description: 'Switch to Matcha theme',
+        execute: (_, actions) => {
+            actions.setTheme('matcha');
+            actions.setMatrixBoost(false);
+            return 'Loading Matcha theme...';
+        },
+    },
+    chat: {
+        name: 'chat',
+        description: 'Talk to Jayant AI (usage: chat jayant)',
+        execute: (args, actions) => {
+            if (args[0] === 'jayant') {
+                actions.setIsAiMode(true);
+                return { type: 'ai', content: "Hello! I am Jayant's AI assistant. Ask me anything about his work. Press Esc or type 'exit' to leave AI mode." };
+            }
+            return 'Usage: chat jayant';
+        },
+    },
+
+    menu: {
+        name: 'menu',
+        description: 'Alias for help',
+        hidden: true,
+        execute: (args, actions) => commands.help.execute(args, actions),
+    },
+    whoami: {
+        name: 'whoami',
+        description: 'Alias for about',
+        hidden: true,
+        execute: (args, actions) => commands.about.execute(args, actions),
+    },
+    neofetch: {
+        name: 'neofetch',
+        description: 'Alias for about',
+        hidden: true,
+        execute: (args, actions) => commands.about.execute(args, actions),
+    },
+    open: {
+        name: 'open',
+        description: 'Alias for project',
+        hidden: true,
+        execute: (args, actions) => commands.project.execute(args, actions),
+    },
+    'case-study': {
+        name: 'case-study',
+        description: 'Alias for project',
+        hidden: true,
+        execute: (args, actions) => commands.project.execute(args, actions),
+    },
+    education: {
+        name: 'education',
+        description: 'View educational background',
+        hidden: true,
+        execute: () => {
+            return (
+                <div className="flex flex-col gap-4">
+                    <div className="mb-2 w-max border-b border-theme-text/30 pb-2 text-lg font-bold">Education</div>
+                    {resume.education.map((edu, index) => (
+                        <div key={index} className="flex flex-col">
+                            <div className="flex justify-between gap-2">
+                                <span className="font-bold text-theme-text">{edu.institution}</span>
+                                <span className="text-sm text-theme-dim">[{edu.startDate} - {edu.endDate}]</span>
+                            </div>
+                            <div className="text-theme-accent">{edu.studyType} in {edu.area}</div>
+                        </div>
+                    ))}
+                </div>
+            );
+        },
+    },
+    impact: {
+        name: 'impact',
+        description: 'Legacy alias',
+        hidden: true,
+        execute: (args, actions) => commands.about.execute(args, actions),
+    },
+    timeline: {
+        name: 'timeline',
+        description: 'Legacy alias',
+        hidden: true,
+        execute: (args, actions) => commands.experience.execute(args, actions),
+    },
+    stack: {
+        name: 'stack',
+        description: 'Legacy alias',
+        hidden: true,
+        execute: (args, actions) => commands.skills.execute(args, actions),
+    },
+    sudo: {
+        name: 'sudo',
+        description: 'Admin privileges',
+        hidden: true,
+        execute: (args) => {
+            if (args.join(' ') === 'hire jayant') {
+                return (
+                    <div className="text-theme-text">
+                        <div>Access granted.</div>
+                        <div className="mt-2 text-xl font-bold">Welcome aboard!</div>
+                        <div>Contacting candidate...</div>
+                    </div>
+                );
+            }
+            return 'Permission denied: User is not in the sudoers file.';
+        },
+    },
+    coffee: {
+        name: 'coffee',
+        description: 'Brew some coffee',
+        hidden: true,
+        execute: () => {
+            const jokes = [
+                'I drink coffee for your protection.',
+                'Sudo make me a sandwich.',
+                "Error 418: I'm a teapot.",
+                'Software developers are devices that turn coffee into code.',
+            ];
+            return jokes[Math.floor(Math.random() * jokes.length)];
+        },
+    },
+    konami: {
+        name: 'konami',
+        description: 'Cheat code',
+        hidden: true,
+        execute: (_, actions) => {
+            actions.setGlitchMode(true);
+            setTimeout(() => actions.setGlitchMode(false), 3000);
+            return 'GOD MODE ENABLED (visuals only)';
         },
     },
     matrix: {

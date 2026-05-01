@@ -13,14 +13,30 @@ const isTerminalOutput = (value: unknown): value is TerminalOutput => {
 const OutputDisplay: React.FC = () => {
     const { history } = useTerminal();
     const bottomRef = useRef<HTMLDivElement>(null);
+    const shouldStickToBottomRef = useRef(true);
 
     const scrollToBottom = () => {
+        if (!shouldStickToBottomRef.current) return;
+
         bottomRef.current?.scrollIntoView({
             behavior: 'smooth',
             block: 'end',
             inline: 'nearest',
         });
     };
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollPosition = window.innerHeight + window.scrollY;
+            const pageHeight = document.documentElement.scrollHeight;
+            shouldStickToBottomRef.current = pageHeight - scrollPosition < 120;
+        };
+
+        handleScroll();
+        window.addEventListener('scroll', handleScroll, { passive: true });
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     useEffect(() => {
         scrollToBottom();
@@ -47,7 +63,9 @@ const OutputDisplay: React.FC = () => {
                 } else {
                     // Structured TerminalOutput
                     const out = item.output;
-                    if (isTerminalOutput(out) && (out.type === 'text' || out.type === 'ai')) {
+                    if (isTerminalOutput(out) && out.type === 'ai') {
+                        content = out.content;
+                    } else if (isTerminalOutput(out) && out.type === 'text') {
                         content = isLast ? (
                             <TypingOutput text={out.content} onComplete={scrollToBottom} />
                         ) : (

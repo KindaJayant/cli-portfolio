@@ -1,5 +1,4 @@
-import React from 'react';
-import { useTypingEffect } from '../../utils/useTypingEffect';
+import React, { useEffect } from 'react';
 
 interface TypingOutputProps {
     text: string;
@@ -7,9 +6,11 @@ interface TypingOutputProps {
 }
 
 const TypingOutput: React.FC<TypingOutputProps> = ({ text, onComplete }) => {
-    const { displayedText } = useTypingEffect(text, 20, onComplete);
+    useEffect(() => {
+        onComplete?.();
+    }, [onComplete]);
 
-    return <span className="whitespace-pre-wrap break-words font-mono">{displayedText}</span>;
+    return <span className="whitespace-pre-wrap break-words font-mono">{text}</span>;
 };
 
 export default TypingOutput;

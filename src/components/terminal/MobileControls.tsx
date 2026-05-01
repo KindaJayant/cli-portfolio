@@ -4,7 +4,7 @@ import { useTerminal } from '../../context/TerminalContext';
 const MobileControls: React.FC = () => {
     const { executeCommand } = useTerminal();
 
-    const quickCommands = ['whoami', 'projects', 'experience', 'contact', 'clear'];
+    const quickCommands = ['about', 'projects', 'experience', 'skills', 'clear'];
 
     const handleCommand = (cmd: string) => {
         executeCommand(cmd);

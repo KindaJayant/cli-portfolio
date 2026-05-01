@@ -14,12 +14,11 @@ const ASCII_ART = `
 `;
 
 const QUICK_COMMANDS = [
-    { cmd: 'neofetch', label: 'System Summary' },
-    { cmd: 'impact', label: 'Impact Snapshot' },
-    { cmd: 'timeline', label: 'Career Timeline' },
-    { cmd: 'stack', label: 'Stack Signal' },
-    { cmd: 'case-study analyst-project', label: 'Flagship Build' },
-    { cmd: 'chat jayant', label: 'Chat with AI' },
+    { cmd: 'about', label: 'About' },
+    { cmd: 'projects', label: 'Projects' },
+    { cmd: 'project analyst-project', label: 'ResearchAgent' },
+    { cmd: 'experience', label: 'Experience' },
+    { cmd: 'skills', label: 'Skills' },
     { cmd: 'help', label: 'All Commands' },
 ];
 
@@ -30,7 +29,7 @@ const LandingHeader: React.FC = () => {
     const textColor = theme === 'cyberpunk' ? 'text-cyan-400' : 'text-terminal-green';
     const accentColor = theme === 'cyberpunk' ? 'text-fuchsia-500' : 'text-white';
     const borderColor = theme === 'cyberpunk' ? 'border-fuchsia-500 shadow-[0_0_20px_rgba(217,70,239,0.5)]' : 'border-terminal-green shadow-[0_0_15px_rgba(74,222,128,0.3)]';
-    const stats = ['90% voice accuracy', '4,000+ users', '5,000+ equities', 'AI x Full-Stack focus'];
+    const stats = ['5,000+ equities scored', '6,000+ users supported', 'Agent systems', 'LLMOps tooling'];
 
     return (
         <div className="flex flex-col gap-6 mb-8 fade-in w-full">
@@ -55,8 +54,7 @@ const LandingHeader: React.FC = () => {
                     <div className={`${accentColor} text-center md:text-left max-w-2xl`}>
                         <div className="text-xl font-bold mb-2">Hello, I'm {resume.basics.name}</div>
                         <div className="text-gray-400 text-sm md:text-base leading-relaxed">
-                            A developer dedicated to crafting scalable software systems.
-                            I specialize in full-stack products, backend workflows, and AI-powered user experiences.
+                            I build reliable agent workflows, LLMOps tooling, and production AI systems.
                         </div>
                         <div className="flex flex-wrap gap-2 mt-4">
                             {stats.map((stat) => (
@@ -72,7 +70,7 @@ const LandingHeader: React.FC = () => {
             {/* Quick Menu */}
             <div className="flex flex-col gap-3 mt-4">
                 <div className="text-sm uppercase tracking-wider font-bold text-theme-text opacity-80">
-                    Quick Menu / Execute Command:
+                    Quick commands:
                 </div>
                 <div className="flex flex-wrap gap-3">
                     {QUICK_COMMANDS.map(({ cmd, label }) => (

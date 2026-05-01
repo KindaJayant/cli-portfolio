@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react';
 import { useTerminal } from '../context/TerminalContext';
 
 export const useAiChat = () => {
-    const { pushToHistory, updateLastHistoryItem, setIsAiMode } = useTerminal();
+    const { pushToHistory, setIsAiMode } = useTerminal();
 
     // Refs for safe async handling
     const abortRef = useRef<AbortController | null>(null);
@@ -56,12 +56,6 @@ export const useAiChat = () => {
         const controller = new AbortController();
         abortRef.current = controller;
 
-        // 5. Create initial empty AI response entry
-        // We push a new history item for the AI response. 
-        // The command for THIS entry should probably be 'jayant-ai' to match the prompt style?
-        // In the mock it was: pushToHistory('jayant-ai', { type: 'ai', content: response });
-        pushToHistory('jayant-ai', { type: 'ai', content: '' });
-
         try {
             const response = await fetch('/api/chat', {
                 method: 'POST',
@@ -75,38 +69,22 @@ export const useAiChat = () => {
             if (response.status === 404) {
                 // Determine if we are likely in dev mode without API
                 // Fallback to mock for local dev experience
-                updateLastHistoryItem("Connect to Vercel to see real AI! (Mocking response...) \n\n");
-
-                // Simulate Mock Delay
-                setTimeout(() => {
-                    const mock = getMockResponse(trimmed);
-                    updateLastHistoryItem(mock);
-                }, 500);
+                const mock = getMockResponse(trimmed);
+                pushToHistory('jayant-ai', { type: 'ai', content: mock });
                 return;
             }
 
-            if (!response.ok || !response.body) {
+            if (!response.ok) {
                 throw new Error(response.statusText || 'Network error');
             }
+            const text = (await response.text()).trim();
 
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            let accumulatedResponse = '';
+            if (!mountedRef.current) return;
 
-            while (true) {
-                const { done, value } = await reader.read();
-
-                if (done) break;
-
-                // Memory safety check
-                if (!mountedRef.current) break;
-
-                const chunk = decoder.decode(value, { stream: true });
-                accumulatedResponse += chunk;
-
-                // Update the UI with new chunk
-                updateLastHistoryItem(accumulatedResponse);
-            }
+            pushToHistory('jayant-ai', {
+                type: 'ai',
+                content: text || 'Jayant AI returned an empty response.',
+            });
 
         } catch (error: any) {
             if (error.name === 'AbortError') {
@@ -115,8 +93,10 @@ export const useAiChat = () => {
             }
 
             if (mountedRef.current) {
-                // Update with error message
-                updateLastHistoryItem(`Error: ${error.message || 'Failed to fetch response.'}`);
+                pushToHistory('jayant-ai', {
+                    type: 'ai',
+                    content: `Error: ${error.message || 'Failed to fetch response.'}`,
+                });
             }
         } finally {
             if (abortRef.current === controller) {

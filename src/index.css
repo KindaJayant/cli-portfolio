@@ -32,6 +32,34 @@
     /* Deep purple bg */
   }
 
+  .theme-monkeytype {
+    --color-text: #d1d0c5;
+    --color-dim: #646669;
+    --color-accent: #e2b714;
+    --color-bg: #323437;
+  }
+
+  .theme-serika {
+    --color-text: #d1d0c5;
+    --color-dim: #646669;
+    --color-accent: #e2b714;
+    --color-bg: #323437;
+  }
+
+  .theme-nord {
+    --color-text: #d8dee9;
+    --color-dim: #81a1c1;
+    --color-accent: #88c0d0;
+    --color-bg: #2e3440;
+  }
+
+  .theme-matcha {
+    --color-text: #d3c6aa;
+    --color-dim: #7fbbb3;
+    --color-accent: #a7c080;
+    --color-bg: #2d353b;
+  }
+
   body {
     background-color: var(--color-bg);
     color: var(--color-text);

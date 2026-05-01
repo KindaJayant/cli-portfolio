@@ -20,8 +20,8 @@ interface TerminalContextType {
     glitchModeActive: boolean;
     setGlitchMode: (active: boolean) => void;
 
-    theme: 'dark' | 'light' | 'cyberpunk';
-    setTheme: (theme: 'dark' | 'light' | 'cyberpunk') => void;
+    theme: 'dark' | 'light' | 'cyberpunk' | 'serika' | 'nord' | 'matcha';
+    setTheme: (theme: 'dark' | 'light' | 'cyberpunk' | 'serika' | 'nord' | 'matcha') => void;
     showLightModeModal: boolean;
     setShowLightModeModal: (show: boolean) => void;
     trollStage: 0 | 1 | 2;
@@ -74,7 +74,7 @@ export const TerminalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const [glitchModeActive, setGlitchMode] = useState(false);
 
     // Theme & Troll Mode State
-    const [theme, setTheme] = useState<'dark' | 'light' | 'cyberpunk'>('dark');
+    const [theme, setTheme] = useState<'dark' | 'light' | 'cyberpunk' | 'serika' | 'nord' | 'matcha'>('dark');
     const [showLightModeModal, setShowLightModeModal] = useState(false);
     const [trollStage, setTrollStage] = useState<0 | 1 | 2>(0);
     const [isAiMode, setIsAiMode] = useState(false); // Prep for Phase 4
@@ -137,7 +137,8 @@ export const TerminalProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                     setShowLightModeModal(true);
                 },
                 setTheme,
-                setIsAiMode
+                setIsAiMode,
+                runCommand: (command: string) => executeCommand(command),
             };
 
             const output = cmd.execute(args, actions);

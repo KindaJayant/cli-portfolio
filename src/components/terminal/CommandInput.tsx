@@ -7,7 +7,7 @@ import { useAiChat } from '../../utils/useAiChat';
 
 const CommandInput: React.FC = () => {
     const [input, setInput] = useState('');
-    const { executeCommand, history, pushToHistory, theme, isAiMode } = useTerminal();
+    const { executeCommand, history, pushToHistory, theme, isAiMode, setIsAiMode } = useTerminal();
     const inputRef = useRef<HTMLInputElement>(null);
     const { handleAiInput } = useAiChat();
 
@@ -36,6 +36,14 @@ const CommandInput: React.FC = () => {
     }, [history]);
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (isAiMode && e.key === 'Escape') {
+            e.preventDefault();
+            setIsAiMode(false);
+            pushToHistory('System', { type: 'text', content: 'Exited AI mode. Back to terminal commands.' });
+            setInput('');
+            return;
+        }
+
         if (e.ctrlKey && e.key === 'l') {
             e.preventDefault();
             executeCommand('clear');
@@ -79,18 +87,27 @@ const CommandInput: React.FC = () => {
         if (isAiMode) return 'text-purple-400';
         if (theme === 'light') return 'text-black';
         if (theme === 'cyberpunk') return 'text-cyan-400';
+        if (theme === 'serika') return 'text-[#e2b714]';
+        if (theme === 'nord') return 'text-[#88c0d0]';
+        if (theme === 'matcha') return 'text-[#a7c080]';
         return 'text-terminal-green';
     };
 
     const getInputColor = () => {
         if (theme === 'light') return 'text-black placeholder-gray-500';
         if (theme === 'cyberpunk') return 'text-fuchsia-400 placeholder-fuchsia-400/30';
+        if (theme === 'serika') return 'text-[#d1d0c5] placeholder-[#646669]';
+        if (theme === 'nord') return 'text-[#d8dee9] placeholder-[#81a1c1]';
+        if (theme === 'matcha') return 'text-[#d3c6aa] placeholder-[#7fbbb3]';
         return 'text-terminal-green placeholder-terminal-green/30';
     };
 
     const getCursorColor = () => {
         if (theme === 'light') return 'bg-black text-white';
         if (theme === 'cyberpunk') return 'bg-cyan-400 text-black';
+        if (theme === 'serika') return 'bg-[#e2b714] text-[#323437]';
+        if (theme === 'nord') return 'bg-[#88c0d0] text-[#2e3440]';
+        if (theme === 'matcha') return 'bg-[#a7c080] text-[#2d353b]';
         return 'bg-terminal-green text-terminal-black';
     };
 
@@ -106,12 +123,11 @@ const CommandInput: React.FC = () => {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    onBlur={() => inputRef.current?.focus()}
                     className={`w-full bg-transparent border-none outline-none font-mono caret-transparent relative z-[100] ${getInputColor()}`}
                     autoFocus
                     spellCheck="false"
                     autoComplete="off"
-                    placeholder={isAiMode ? "Ask me anything..." : "type 'help' to get started"}
+                    placeholder={isAiMode ? "Ask me anything... (Esc or 'exit' to leave)" : "type 'help' to get started"}
                 />
                 {/* Custom block cursor */}
                 <span

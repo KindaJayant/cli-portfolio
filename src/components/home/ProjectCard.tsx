@@ -23,7 +23,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, wide = fals
                     <span>{project.year}</span>
                 </div>
 
-                <h3 className="font-display text-[2rem] leading-[1.02] text-[#ece8e1] md:text-[2.3rem]">
+                <h3 className="font-sans text-[1.7rem] font-semibold leading-[1.02] tracking-[-0.035em] text-[#ece8e1] md:text-[1.95rem]">
                     {project.title}
                 </h3>
 
@@ -53,9 +53,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, wide = fals
                                 onError={(event) => {
                                     event.currentTarget.style.display = 'none';
                                 }}
-                                className="h-full w-full object-cover opacity-55 grayscale transition duration-300 group-hover:scale-[1.02] group-hover:opacity-72"
+                                className="h-full w-full object-cover object-top opacity-88 saturate-[1.04] transition duration-300 group-hover:scale-[1.02] group-hover:opacity-100"
                             />
-                            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(12,12,12,0.08),rgba(12,12,12,0.42))]" />
+                            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(12,12,12,0.05),rgba(12,12,12,0.32))]" />
                         </>
                     ) : null}
                 </div>
