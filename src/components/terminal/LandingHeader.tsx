@@ -2,17 +2,6 @@ import React from 'react';
 import { useTerminal } from '../../context/TerminalContext';
 import { resume } from '../../data/resume';
 
-const ASCII_ART = `
-      _                         _
-     | |                       | |
-     | | __ _ _   _  __ _ _ __ | |_
- _   | |/ _\` | | | |/ _\` | '_ \\| __|
-| |__| | (_| | |_| | (_| | | | | |_
- \\____/ \\__,_|\\__, |\\__,_|_| |_|\\__|
-               __/ |
-              |___/ 
-`;
-
 const QUICK_COMMANDS = [
     { cmd: 'about', label: 'About' },
     { cmd: 'projects', label: 'Projects' },
@@ -47,9 +36,9 @@ const LandingHeader: React.FC = () => {
 
                 {/* Header & Bio */}
                 <div className="flex flex-col items-center md:items-start w-full">
-                    <pre className={`font-mono font-bold leading-none tracking-tighter ${textColor} text-[8px] md:text-[10px] lg:text-xs select-none mb-4 whitespace-pre-wrap text-center md:text-left`}>
-                        {ASCII_ART}
-                    </pre>
+                    <div className={`mb-4 w-full text-center font-mono text-[2.6rem] font-bold leading-none tracking-[-0.06em] md:text-left md:text-[3.1rem] ${textColor}`}>
+                        Jayant
+                    </div>
 
                     <div className={`${accentColor} text-center md:text-left max-w-2xl`}>
                         <div className="text-xl font-bold mb-2">Hello, I'm {resume.basics.name}</div>

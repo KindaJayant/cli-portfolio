@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 
 .vercel
+
+# local Codex preview artifacts
+.codex-*.png
+.promptops_server_8132.py
